@@ -1,0 +1,367 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-100: #3692ff;
+  --primary-200: #1967d6;
+  --primary-300: #1251aa;
+
+  --error-red: #f74747;
+
+  --secondary-900: #111827;
+  --secondary-800: #1f2937;
+  --secondary-700: #374151;
+  --secondary-500: #6b7280;
+  --secondary-400: #9ca3af;
+  --secondary-200: #e5e7eb;
+  --secondary-100: #f3f4f6;
+  --secondary-50: #f9fafb;
+}
+
+body {
+  background-color: #fff;
+}
+
+/* Header */
+.header-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: white;
+  display: flex;
+  width: 100%;
+  height: 4.375rem;
+  padding: 0.5625rem 12.5rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  justify-content: space-between;
+  align-self: stretch;
+}
+
+/* Button */
+.btn {
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--secondary-200);
+}
+
+.login-btn {
+  display: flex;
+  width: 8rem;
+  height: 3rem;
+  padding: 0.75rem 1.4375rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.5rem;
+  background-color: var(--primary-100);
+  color: var(--secondary-100);
+}
+
+.item-btn {
+  display: flex;
+  height: 3.5rem;
+  padding: 1rem 7.75rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 2.5rem;
+  background-color: var(--primary-100);
+}
+
+/* Main */
+main {
+  position: relative;
+  margin-top: 4.375rem;
+}
+
+/* Landing */
+.landing-container {
+  width: 120rem;
+  height: 33.75rem;
+  background-color: #cfe5ff;
+}
+
+/* Landing 1 */
+.landing1-container {
+  width: 100%;
+  height: 33.75rem;
+  background-color: #cfe5ff;
+}
+
+.landing1 {
+  display: inline-flex;
+  position: absolute;
+  left: 25.3125rem;
+  top: 12.5rem;
+}
+
+.landing1-description {
+  display: flex;
+  padding-bottom: 3.75rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.landing1-text {
+  color: var(--Secondary-700);
+  font-family: "Pretendard Variable";
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%;
+}
+
+.landing1-top-img {
+  display: flex;
+  width: 46.625rem;
+  height: 24.8125rem;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Landing 2 */
+.landing2-container {
+  width: 100%;
+  height: 33.75rem;
+  background-color: #cfe5ff;
+}
+
+.landing2 {
+  display: inline-flex;
+  position: absolute;
+  bottom: 0;
+  left: 25.3125rem;
+  gap: 4.3125rem;
+}
+
+.landing2-description {
+  display: flex;
+  padding-bottom: 3.75rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.landing2-text {
+  color: var(--Secondary-700);
+  font-family: "Pretendard Variable";
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%;
+}
+
+.landing-bottom-img {
+  display: flex;
+  width: 46.625rem;
+  height: 24.8125rem;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Section */
+.st {
+  height: 45rem;
+  background-color: white;
+}
+
+.section-title {
+  color: var(--primary-100);
+  font-family: "Pretendard Variable";
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.625rem;
+}
+
+.section-img {
+  display: flex;
+  width: 36.75rem;
+  height: 27.75rem;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Section 1 */
+.section1 {
+  display: flex;
+  padding: 8.625rem 21.5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.section1-container {
+  display: flex;
+  width: 61.75rem;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  background-color: #fcfcfc;
+}
+
+/* Section 2 */
+.section2 {
+  display: flex;
+  padding: 8.625rem 21.375rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.section2-container {
+  display: flex;
+  width: 61.75rem;
+  justify-content: center;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 4rem;
+  background-color: #fcfcfc;
+}
+
+/* Section 3 */
+.section3 {
+  display: flex;
+  padding: 8.625rem 22.5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.section3-container {
+  display: flex;
+  width: 61.75rem;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  background-color: #fcfcfc;
+}
+
+/* Section 1,3 - 왼쪽 정렬 */
+.section1-description,
+.section3-description {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.section1-content,
+.section3-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.content-title-left {
+  color: var(--secondary-700);
+  font-family: "Pretendard Variable";
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%;
+  letter-spacing: 0.05rem;
+}
+
+.content-text-left {
+  color: var(--secondary-700);
+  font-family: "Pretendard Variable";
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 2rem;
+}
+
+/* Section 2 - 오른쪽 정렬 */
+.section2-description {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.section2-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1.5rem;
+}
+
+.content-title-right {
+  color: var(--secondary-700);
+  text-align: right;
+  font-family: "Pretendard Variable";
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 140%;
+  letter-spacing: 0.05rem;
+}
+
+.content-text-right {
+  color: var(--secondary-700);
+  text-align: right;
+  font-family: "Pretendard Variable";
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 2rem;
+}
+
+/* Footer */
+.footer-container {
+  display: flex;
+  bottom: 0;
+  height: 10rem;
+  width: 100%;
+  padding: 2rem 12.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  background-color: var(--secondary-900);
+}
+
+.footer-component {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+}
+
+.footer-left {
+  color: var(--secondary-400);
+}
+
+.footer-center {
+  color: var(--secondary-200);
+  display: flex;
+  align-items: flex-start;
+  gap: 1.875rem;
+}
+
+/* Responsive */
+
+@media (min-width: 120rem) {
+  .landing1-container,
+  .landing2-container {
+    width: 100%;
+    max-width: none;
+  }
+
+  .landing1,
+  .landing2 {
+    left: calc(50% - 34.6875rem);
+  }
+}
