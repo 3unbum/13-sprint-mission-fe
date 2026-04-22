@@ -1,71 +1,89 @@
 <!doctype html>
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Login</title>
-        <link rel="stylesheet" href="./css/reset.css" />
-        <link rel="stylesheet" href="./css/login.css" />
-        <link rel="icon" type="image/x-icon" href="./assets/logo/panda/panda face@3x.png" />
-    </head>
-    <body>
-        <div class="container">
-            <a href="./"><img src="./assets/logo/panda/Property 1=lg.png" alt="Logo" class="logo btn" ></a>
-            <div class="login-form">
-                <form class="login">
-                    <div class="email-field">
-                        <h2>이메일</h2>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            autocomplete="email"
-                            placeholder="이메일을 입력해주세요"
-                            class="email-input"
-                        />
-                        <!-- class는 CSS 스타일링과 JS 선택용. id/name은 폼 데이터 제출, 브라우저 자동 완성, 접근성용 -->
-                    </div>
-                    <div class="password-field">
-                        <h2>비밀번호</h2>
-                        <div class="password-field">
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                autocomplete="current-password"
-                                placeholder="비밀번호를 입력해주세요"
-                                class="password-input"
-                            />
-                            <button
-                                type="button"
-                                class="password-toggle-btn"
-                                tabindex="-1"
-                                aria-label="비밀번호 표시"
-                            >
-                            <!-- tabindex="-1"은 키보드 포커스를 받지 않도록 설정 -->
-                                <img
-                                    src="../assets/btn/Property 1=Variant2.png"
-                                    alt=""
-                                    class="password-toggle-icon"
-                                />
-                            </button>
-                        </div>
-                    </div>
-                    <button type="submit" class="login-btn">로그인</button>
-                </form>
-                <div class="social-link">
-                    <div class="social-link-content">
-                        <p class="social-link-title">간편로그인하기</p>
-                        <div class="social-link-btns">
-                            <a class="google-login-btn" href="https://www.google.com/"><img src="./assets/logo/social/social_google.png" alt="Google Login"></a>
-                            <a class="kakao-login-btn" href="https://www.kakaocorp.com/page/"><img src="./assets/logo/social/social_kakao.png" alt="Kakao Login"></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="signup-link">
-                    <p>판다마켓이 처음이신가요?</p><a href="./signup.html">회원가입</a>
-                </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/login.css" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="./assets/logo/panda/panda face@3x.png"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <a href="./"
+        ><img
+          src="./assets/logo/panda/Property 1=lg.png"
+          alt="Logo"
+          class="logo btn"
+      /></a>
+      <div class="login-form">
+        <form class="login">
+          <div class="email-field">
+            <label for="email">이메일</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="email"
+              placeholder="이메일을 입력해주세요"
+              class="email-input"
+            />
+            <!-- class는 CSS 스타일링과 JS 선택용. id/name은 폼 데이터 제출, 브라우저 자동 완성, 접근성용 -->
+          </div>
+          <div class="password-field">
+            <label for="password">비밀번호</label>
+            <div class="password-input-wrapper">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                autocomplete="current-password"
+                placeholder="비밀번호를 입력해주세요"
+                class="password-input"
+              />
+              <button
+                type="button"
+                class="password-toggle-btn"
+                tabindex="-1"
+                aria-label="비밀번호 표시"
+              >
+                <!-- tabindex="-1"은 키보드 포커스를 받지 않도록 설정 -->
+                <img
+                  src="../assets/icons/eye-closed.png"
+                  alt=""
+                  class="password-toggle-icon"
+                />
+              </button>
             </div>
+          </div>
+          <button type="submit" class="login-btn">로그인</button>
+        </form>
+        <div class="social-link">
+          <div class="social-link-content">
+            <p class="social-link-title">간편로그인하기</p>
+            <div class="social-link-btns">
+              <a class="google-login-btn" href="https://www.google.com/"
+                ><img
+                  src="./assets/logo/social/social_google.png"
+                  alt="Google Login"
+              /></a>
+              <a class="kakao-login-btn" href="https://www.kakaocorp.com/page/"
+                ><img
+                  src="./assets/logo/social/social_kakao.png"
+                  alt="Kakao Login"
+              /></a>
+            </div>
+          </div>
         </div>
-    </body>
+        <div class="signup-link">
+          <p>판다마켓이 처음이신가요?</p>
+          <a href="./signup.html">회원가입</a>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

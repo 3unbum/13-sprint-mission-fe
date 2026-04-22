@@ -344,6 +344,13 @@ main {
   color: var(--secondary-400);
 }
 
+.footer-right {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .footer-center {
   color: var(--secondary-200);
   display: flex;

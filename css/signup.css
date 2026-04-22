@@ -83,14 +83,14 @@ body {
 .email-field,
 .password-field,
 .nickname-field {
-    position: relative;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.email-field h2,
-.password-field h2,
-.nickname-field h2 {
-    margin-bottom: 16px;
+.password-input-wrapper {
+    position: relative;
 }
 
 .password-input {
