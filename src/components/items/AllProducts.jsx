@@ -1,0 +1,84 @@
+import { useEffect, useState } from "react";
+import { getProducts } from "../../api/products";
+import useResponsivePageSize from "../../hooks/useResponsivePageSize";
+import ProductCard from "./ProductCard";
+import Dropdown from "../common/Dropdown";
+import Pagination from "../common/Pagination";
+import SearchBar from "./SearchBar";
+import styles from "./AllProducts.module.css";
+
+// 컴포넌트 외부 상수: 매 렌더마다 새로 만들지 않게.
+// 드롭다운 옵션은 변하지 않으니 밖에 두는 게 효율적.
+const SORT_OPTIONS = [
+  { value: "recent", label: "최신순" },
+  { value: "favorite", label: "좋아요순" },
+];
+
+export default function AllProducts() {
+  // 커스텀 hook: 화면 너비에 따라 pageSize가 바뀜 (10/6/4).
+  // 그냥 일반 변수처럼 쓰지만 내부적으론 state라서 너비 변경 시 리렌더됨.
+  const pageSize = useResponsivePageSize();
+
+  const [products, setProducts] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [orderBy, setOrderBy] = useState("recent");
+  const [keyword, setKeyword] = useState("");
+  const [page, setPage] = useState(1);
+
+  // 매 렌더마다 새로 계산. totalCount나 pageSize가 바뀌면 자동으로 갱신됨.
+  // useState로 따로 관리할 필요 없음 (파생값이라 그냥 변수로).
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  useEffect(() => {
+    getProducts({ page, pageSize, orderBy, keyword })
+      .then((data) => {
+        setProducts(data.list);
+        setTotalCount(data.totalCount);
+      })
+      .catch((err) => console.error(err));
+    // 의존성 배열: 이 값들이 바뀔 때마다 다시 fetch.
+    // 한 개라도 빠뜨리면 그 값을 바꿔도 fetch가 안 일어남 (실제로 실수했던 부분).
+  }, [page, pageSize, orderBy, keyword]);
+
+  // 정렬/검색 바뀌면 1페이지로 리셋.
+  // 이유: 5페이지에서 검색했는데 결과가 2페이지뿐이면 빈 화면 보임.
+  // useEffect 안에서 처리하지 않고 핸들러에서 명시적으로 처리하는 게 흐름이 명확.
+  function handleSortChange(value) {
+    setOrderBy(value);
+    setPage(1);
+  }
+
+  function handleSearch(value) {
+    setKeyword(value);
+    setPage(1);
+  }
+
+  return (
+    <section className={styles.section}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>판매 중인 상품</h2>
+        {/* SearchBar는 자식이 입력값을 관리하다가, Enter 시점에만 부모에게 알림 */}
+        <SearchBar onSearch={handleSearch} />
+        {/* Dropdown은 controlled component: 현재값(value)과 변경콜백(onChange)을 부모에서 관리 */}
+        <Dropdown
+          value={orderBy}
+          onChange={handleSortChange}
+          options={SORT_OPTIONS}
+        />
+      </div>
+      <ul className={styles.grid}>
+        {products.map((product) => (
+          // key는 안정적인 ID 사용 (index 쓰면 정렬 바뀔 때 리렌더 꼬임)
+          <li key={product.id}>
+            <ProductCard product={product} />
+          </li>
+        ))}
+      </ul>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
+    </section>
+  );
+}
