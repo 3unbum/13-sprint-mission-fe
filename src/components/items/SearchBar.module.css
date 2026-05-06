@@ -1,0 +1,23 @@
+.form {
+  flex: 1;
+  max-width: 400px;
+}
+
+.input {
+  width: 100%;
+  padding: 9px 20px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--secondary-100);
+  font-size: 16px;
+  color: var(--secondary-800);
+  font-family: inherit;
+}
+
+.input::placeholder {
+  color: var(--secondary-400);
+}
+
+.input:focus {
+  outline: 2px solid var(--primary-100);
+}
