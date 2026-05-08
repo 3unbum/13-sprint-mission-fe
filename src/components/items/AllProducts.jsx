@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProducts } from "../../api/products";
 import useResponsivePageSize from "../../hooks/useResponsivePageSize";
@@ -9,10 +10,7 @@ import styles from "./AllProducts.module.css";
 
 // 컴포넌트 외부 상수: 매 렌더마다 새로 만들지 않게.
 // 드롭다운 옵션은 변하지 않으니 밖에 두는 게 효율적.
-const SORT_OPTIONS = [
-  { value: "recent", label: "최신순" },
-  { value: "favorite", label: "좋아요순" },
-];
+const SORT_OPTIONS = [{ value: "recent", label: "최신순" }];
 
 export default function AllProducts() {
   // 커스텀 hook: 화면 너비에 따라 pageSize가 바뀜 (10/6/4).
@@ -59,6 +57,9 @@ export default function AllProducts() {
         <h2 className={styles.title}>판매 중인 상품</h2>
         {/* SearchBar는 자식이 입력값을 관리하다가, Enter 시점에만 부모에게 알림 */}
         <SearchBar onSearch={handleSearch} />
+        <Link to="/registration" className={styles.registerBtn}>
+          상품 등록하기
+        </Link>
         {/* Dropdown은 controlled component: 현재값(value)과 변경콜백(onChange)을 부모에서 관리 */}
         <Dropdown
           value={orderBy}

@@ -26,6 +26,19 @@
   margin: 0;
 }
 
+.registerBtn {
+  display: flex;
+  height: 2.625rem;
+  padding: 0.75rem 1.4375rem;
+  align-items: center;
+  border-radius: 0.5rem;
+  background-color: var(--primary-100);
+  color: var(--secondary-100);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
 @media (max-width: 1199px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
