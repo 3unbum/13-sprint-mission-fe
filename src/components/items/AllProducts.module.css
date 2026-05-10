@@ -39,6 +39,14 @@
   white-space: nowrap;
 }
 
+.statusMessage {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--secondary-500);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
 @media (max-width: 1199px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);

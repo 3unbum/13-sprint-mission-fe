@@ -3,7 +3,9 @@
 // 2. URL이나 에러 처리 방식 변경 시 한 곳만 수정
 // 3. 컴포넌트는 "데이터를 가져온다"는 의도만 표현 (UI와 통신 분리)
 
-const BASE_URL = "https://pandamarket-be-eunbum.onrender.com";
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ??
+  "https://pandamarket-be-eunbum.onrender.com";
 
 // 객체로 인자를 받는 패턴: 호출 시 어떤 값인지 명확함.
 // getProducts({ page: 2, orderBy: "favorite" }) ← 가독성 좋음
@@ -35,7 +37,16 @@ export async function getProducts({
   // res.ok (200~299인지) 직접 확인 후 에러 던져야 함.
   // 안 그러면 깨진 응답에 대해 res.json()이 이상한 결과 반환.
   if (!res.ok) {
-    throw new Error(`상품 목록을 불러오지 못했어요. (${res.status})`);
+    // 응답 본문도 같이 담기 (가능한 경우)
+    let body;
+    try {
+      body = await res.text();
+    } catch {
+      body = "(no body)";
+    }
+    throw new Error(
+      `상품 목록을 불러오지 못했어요. ${res.status} ${res.statusText}: ${body}`,
+    );
   }
   const data = await res.json();
   // _id -> id 변환: 컴포넌트가 product.id로 접근하니까 매핑.
@@ -58,7 +69,15 @@ export async function createProduct({ name, description, price, tags }) {
   });
 
   if (!res.ok) {
-    throw new Error(`상품을 등록하지 못했어요. (${res.status})`);
+    let body;
+    try {
+      body = await res.text();
+    } catch {
+      body = "(no body)";
+    }
+    throw new Error(
+      `상품을 등록하지 못했어요. ${res.status} ${res.statusText} : ${body}`,
+    );
   }
 
   return res.json();

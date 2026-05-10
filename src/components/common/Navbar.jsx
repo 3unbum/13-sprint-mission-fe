@@ -20,9 +20,7 @@ export default function Navbar() {
             <img src={logoTypo} alt="판다마켓" className={styles.logoImgSm} />
           </Link>
           <nav className={styles.nav}>
-            <a href="#" className={styles.navLink}>
-              자유게시판
-            </a>
+            <a className={styles.navLink}>자유게시판</a>
             {/* 현재 페이지 메뉴는 active 클래스 추가 → 다른 색상으로 표시.
                 두 클래스를 백틱 템플릿으로 합침. */}
             <NavLink
@@ -35,9 +33,7 @@ export default function Navbar() {
             </NavLink>
           </nav>
         </div>
-        <a href="#" className={styles.loginBtn}>
-          로그인
-        </a>
+        <a className={styles.loginBtn}>로그인</a>
       </div>
     </header>
   );
