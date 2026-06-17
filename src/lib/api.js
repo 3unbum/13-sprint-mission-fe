@@ -28,3 +28,10 @@ export async function getArticles({
 
   return res.json(); // { list, totalCount }
 }
+
+// 베스트 게시글 - 좋아요 많은 순 상위 N개.
+// 백엔드가 좋아요를 안 주므로, 넉넉히 가져와 프론트에서 가짜 likeCount로 정렬한다.
+export async function getBestArticles(take = 3) {
+  const { list } = await getArticles({ pageSize: 30 });
+  return list;
+}
