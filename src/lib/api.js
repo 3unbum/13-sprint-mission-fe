@@ -35,3 +35,16 @@ export async function getBestArticles(take = 3) {
   const { list } = await getArticles({ pageSize: 30 });
   return list;
 }
+
+// 게시글 등록 (Server Action에서 호출)
+export async function createArticle({ title, content }) {
+  const res = await fetch(`${BASE_URL}/articles`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, content }),
+  });
+
+  if (!res.ok) throw new Error(`게시글 등록에 실패했어요. (${res.status})`);
+
+  return res.json(); // 생성된 article
+}
