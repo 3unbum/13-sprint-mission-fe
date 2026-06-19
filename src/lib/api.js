@@ -1,4 +1,4 @@
-import { BASE_URL } from "./config";
+import { BASE_URL } from "@/lib/config";
 
 // 게시글 목록 조회 (서버 컴포넌트에서 호출)
 export async function getArticles({
@@ -47,4 +47,74 @@ export async function createArticle({ title, content }) {
   if (!res.ok) throw new Error(`게시글 등록에 실패했어요. (${res.status})`);
 
   return res.json(); // 생성된 article
+}
+
+// 게시글 상세 조회 (서버 컴포넌트에서 호출)
+export async function getArticle(id) {
+  const res = await fetch(`${BASE_URL}/articles/${id}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) throw new Error(`게시글을 불러오지 못했어요. (${res.status})`);
+
+  return res.json(); // article
+}
+
+// 게시글 댓글 목록 조회 (cursor 페이지네이션)
+export async function getComments(articleId, { cursor, limit = 5 } = {}) {
+  const params = new URLSearchParams({ limit: String(limit) });
+  if (cursor) params.set("cursor", String(cursor));
+
+  const res = await fetch(
+    `${BASE_URL}/articles/${articleId}/comments?${params}`,
+    { cache: "no-store" },
+  );
+
+  if (!res.ok) throw new Error(`댓글을 불러오지 못했어요. (${res.status})`);
+
+  return res.json(); // { list, nextCursor }
+}
+
+// 댓글 등록 (Server Action에서 호출)
+export async function createComment(articleId, content) {
+  const res = await fetch(`${BASE_URL}/articles/${articleId}/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content }),
+  });
+
+  if (!res.ok) throw new Error(`댓글 등록에 실패했어요. (${res.status})`);
+
+  return res.json(); // 생성된 comment
+}
+
+// 게시글 삭제 (Server Action에서 호출)
+export async function deleteArticle(id) {
+  const res = await fetch(`${BASE_URL}/articles/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) throw new Error(`게시글 삭제에 실패했어요. (${res.status})`);
+}
+
+// 댓글 수정 (Server Action에서 호출)
+export async function updateComment(id, content) {
+  const res = await fetch(`${BASE_URL}/comments/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content }),
+  });
+
+  if (!res.ok) throw new Error(`댓글 수정에 실패했어요. (${res.status})`);
+
+  return res.json(); // 수정된 comment
+}
+
+// 댓글 삭제 (Server Action에서 호출)
+export async function deleteComment(id) {
+  const res = await fetch(`${BASE_URL}/comments/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) throw new Error(`댓글 삭제에 실패했어요. (${res.status})`);
 }

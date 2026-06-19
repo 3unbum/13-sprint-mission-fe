@@ -15,3 +15,10 @@ export function withFake(article) {
     likeCount: (article.id * 37) % 9999, // id로 흩뿌린 값
   };
 }
+
+export function withFakeComment(comment) {
+  return {
+    ...comment,
+    nickname: NICKNAMES[comment.id % NICKNAMES.length],
+  };
+}
