@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import KebabMenu from "@/components/common/KebabMenu";
 import { deleteArticleAction } from "@/app/boards/[id]/actions";
+import Avatar from "@/components/common/Avatar";
 
 // 게시글 상세 (서버 컴포넌트)
 export default async function ArticleDetailPage({ params }) {
@@ -46,13 +47,7 @@ export default async function ArticleDetailPage({ params }) {
         </div>
 
         <div className="mt-4 flex items-center gap-4 text-sm text-gray-400">
-          <Image
-            src="/images/profile.png"
-            alt=""
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
+          <Avatar size={40} />
           <span className="text-gray-600">{article.nickname}</span>
           <span>{formatDate(article.createdAt)}</span>
           <span className="ml-4 flex items-center gap-1 border-l border-gray-200 pl-4">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatDate } from "@/lib/formatDate";
+import Avatar from "@/components/common/Avatar";
 
 // 게시글 한 줄 (서버 컴포넌트 - 인터렉션 없음)
 export default function ArticleListItem({ article }) {
@@ -26,13 +27,7 @@ export default function ArticleListItem({ article }) {
         {/* 닉네임 • 날짜 (좌) / 좋아요 (우) */}
         <div className="mt-4 flex items-center justify-between text-sm text-gray-400">
           <div className="flex items-center gap-2">
-            <Image
-              src="/images/profile.png"
-              alt=""
-              width={24}
-              height={24}
-              className="rounded-full"
-            />
+            <Avatar size={24} />
             <span className="text-gray-600">{article.nickname}</span>
             <span>{formatDate(article.createdAt)}</span>
           </div>

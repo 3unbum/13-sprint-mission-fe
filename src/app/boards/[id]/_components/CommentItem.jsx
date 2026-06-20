@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import Avatar from "@/components/common/Avatar";
 import { formatRelative } from "@/lib/formatDate";
 import KebabMenu from "@/components/common/KebabMenu";
 import {
@@ -78,13 +78,7 @@ export default function CommentItem({ comment, articleId }) {
           </div>
 
           <div className="mt-6 flex items-center gap-2 text-sm text-gray-400">
-            <Image
-              src="/images/profile.png"
-              alt=""
-              width={32}
-              height={32}
-              className="rounded-full"
-            />
+            <Avatar size={32} />
             <div className="flex flex-col">
               <span className="text-gray-600">{comment.nickname}</span>
               <span className="text-xs" suppressHydrationWarning>

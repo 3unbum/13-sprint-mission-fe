@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import CommentItem from "@/app/boards/[id]/_components/CommentItem";
-import { getMoreComments } from "@/lib/api";
+import { getComments } from "@/lib/api";
 import { withFakeComment } from "@/lib/fakeData";
 
 // 댓글 목록 + 더보기 (client - 더보기로 쌓이는 상태 때문)
@@ -21,7 +21,7 @@ export default function CommentList({
   async function handleLoadMore() {
     setLoading(true);
     try {
-      const data = await getMoreComments(articleId, cursor);
+      const data = await getComments(articleId, { cursor, withCache: false });
       setComments((prev) => [...prev, ...data.list.map(withFakeComment)]);
       setCursor(data.nextCursor);
     } finally {
