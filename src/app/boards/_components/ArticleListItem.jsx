@@ -26,11 +26,25 @@ export default function ArticleListItem({ article }) {
         {/* 닉네임 • 날짜 (좌) / 좋아요 (우) */}
         <div className="mt-4 flex items-center justify-between text-sm text-gray-400">
           <div className="flex items-center gap-2">
-            <span className="h-6 w-6 rounded-full bg-gray-200" />
+            <Image
+              src="/images/profile.png"
+              alt=""
+              width={24}
+              height={24}
+              className="rounded-full"
+            />
             <span className="text-gray-600">{article.nickname}</span>
             <span>{formatDate(article.createdAt)}</span>
           </div>
-          <span>♡ {article.likeCount}</span>
+          <span className="flex items-center gap-1">
+            <Image
+              src="/icons/ic_heart_inactive.svg"
+              alt=""
+              width={16}
+              height={16}
+            />
+            {article.likeCount}
+          </span>
         </div>
       </Link>
     </li>

@@ -14,14 +14,23 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-100 h-[70px] w-full border-b border-gray-200 bg-white">
-      <div className="mx-auto flex h-full max-w-[1200px] items-center gap-6 px-6">
+      <div className="mx-auto flex h-full max-w-[1200px] items-center gap-6 px-4 md:px-6">
         <div className="flex flex-1 items-center gap-8">
           <Link href="/boards" aria-label="판다마켓 홈으로 이동">
+            {/* 모바일: 글자 로고만 / 태블릿 +: 아이콘 +글자 */}
+            <Image
+              src="/logo/panda-logo-typo.png"
+              alt="판다마켓"
+              width={80}
+              height={40}
+              className="md:hidden"
+            />
             <Image
               src="/logo/panda-logo.png"
               alt="판다마켓"
               width={120}
               height={40}
+              className="hidden md:block"
             />
           </Link>
 

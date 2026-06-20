@@ -1,5 +1,5 @@
 import { getArticle, getComments } from "@/lib/api";
-import { withFake, withFakeComment } from "@/lib/fakeData";
+import { withFake } from "@/lib/fakeData";
 import CommentList from "@/app/boards/[id]/_components/CommentList";
 import CommentForm from "@/app/boards/[id]/_components/CommentForm";
 import { formatDate } from "@/lib/formatDate";
@@ -17,7 +17,6 @@ export default async function ArticleDetailPage({ params }) {
     getComments(id),
   ]);
   const article = withFake(articleRaw);
-  const comments = commentsData.list.map(withFakeComment);
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-6 md:px-6">
@@ -56,8 +55,14 @@ export default async function ArticleDetailPage({ params }) {
           />
           <span className="text-gray-600">{article.nickname}</span>
           <span>{formatDate(article.createdAt)}</span>
-          <span className="ml-4 border-l border-gray-200 pl-4">
-            ♡ {article.likeCount}
+          <span className="ml-4 flex items-center gap-1 border-l border-gray-200 pl-4">
+            <Image
+              src="/icons/ic_heart_inactive.svg"
+              alt=""
+              width={20}
+              height={20}
+            />
+            {article.likeCount}
           </span>
         </div>
 
@@ -71,7 +76,11 @@ export default async function ArticleDetailPage({ params }) {
         <h2 className="mb-4 text-base font-semibold text-gray-900">댓글달기</h2>
         <CommentForm articleId={article.id} />
         <div className="mt-6">
-          <CommentList comments={comments} articleId={article.id} />
+          <CommentList
+            initialComments={commentsData.list}
+            initialCursor={commentsData.nextCursor}
+            articleId={article.id}
+          />
         </div>
       </section>
 
@@ -81,7 +90,8 @@ export default async function ArticleDetailPage({ params }) {
           href="/boards"
           className="flex h-12 items-center gap-2 rounded-full bg-brand-blue px-6 text-base font-semibold text-white"
         >
-          목록으로 돌아가기 ↩
+          목록으로 돌아가기
+          <Image src="/icons/ic_back.svg" alt="" width={24} height={24} />
         </Link>
       </div>
     </div>

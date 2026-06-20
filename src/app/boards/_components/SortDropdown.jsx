@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 const OPTIONS = [
   { value: "recent", label: "최신순" },
@@ -31,10 +32,24 @@ export default function SortDropdown() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex h-11 w-32 items-center justify-between rounded-lg border border-gray-200 px-4 text-base text-gray-800"
+        className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-200 text-gray-800 md:w-32 md:justify-between md:px-4 md:text-base"
       >
-        {currentLabel}
-        <span className="text-gray-400">▾</span>
+        {/* 모바일: 정렬 아이콘만 / 태블릿+: 라벨 + 화살표 */}
+        <Image
+          src="/icons/ic_sort.svg"
+          alt="정렬"
+          width={24}
+          height={24}
+          className="md:hidden"
+        />
+        <span className="hidden md:inline">{currentLabel}</span>
+        <Image
+          src="/icons/ic_arrow_down.svg"
+          alt=""
+          width={20}
+          height={20}
+          className="hidden md:inline"
+        />
       </button>
 
       {open && (

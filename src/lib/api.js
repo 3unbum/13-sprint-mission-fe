@@ -75,6 +75,20 @@ export async function getComments(articleId, { cursor, limit = 5 } = {}) {
   return res.json(); // { list, nextCursor }
 }
 
+// 댓글 더보기 (client에서 호출) cursor로 다음 페이지를 가져온다.
+export async function getMoreComments(articleId, cursor, limit = 5) {
+  const params = new URLSearchParams({ limit: String(limit) });
+  if (cursor) params.set("cursor", String(cursor));
+
+  const res = await fetch(
+    `${BASE_URL}/articles/${articleId}/comments?${params}`,
+  );
+
+  if (!res.ok) throw new Error(`댓글을 불러오지 못했어요. (${res.status})`);
+
+  return res.json(); // { list, nextCursor }
+}
+
 // 댓글 등록 (Server Action에서 호출)
 export async function createComment(articleId, content) {
   const res = await fetch(`${BASE_URL}/articles/${articleId}/comments`, {
