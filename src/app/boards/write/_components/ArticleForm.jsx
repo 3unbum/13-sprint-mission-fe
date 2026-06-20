@@ -1,25 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { createArticleAction } from "@/app/boards/write/actions";
 
-// 게시글 등록 폼 (client - 등록 버튼 활성/비활성 토글 때문)
-export default function ArticleForm() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+// 게시글 등록/수정 공용 폼
+// action•초깃값•라벨을 prop으로 받아 양쪽에서 재사용한다.
+export default function ArticleForm({
+  action,
+  defaultTitle = "",
+  defaultContent = "",
+  heading = "게시글 쓰기",
+  submitLabel = "등록",
+}) {
+  const [title, setTitle] = useState(defaultTitle);
+  const [content, setContent] = useState(defaultContent);
 
   const isValid = title.trim() && content.trim();
 
   return (
-    <form action={createArticleAction}>
+    <form action={action}>
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-900">게시글 쓰기</h2>
+        <h2 className="text-xl font-bold text-gray-900">{heading}</h2>
         <button
           type="submit"
           disabled={!isValid}
           className="h-11 rounded-lg bg-brand-blue px-6 text-base font-semibold text-white disabled:bg-gray-400"
         >
-          등록
+          {submitLabel}
         </button>
       </div>
 

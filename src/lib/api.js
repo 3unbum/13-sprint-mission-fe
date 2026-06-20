@@ -118,3 +118,16 @@ export async function deleteComment(id) {
 
   if (!res.ok) throw new Error(`댓글 삭제에 실패했어요. (${res.status})`);
 }
+
+// 게시글 수정 (Server Action에서 호출)
+export async function updateArticle(id, { title, content }) {
+  const res = await fetch(`${BASE_URL}/articles/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, content }),
+  });
+
+  if (!res.ok) throw new Error(`게시글 수정에 실패했어요. (${res.status})`);
+
+  return res.json(); // 수정된 article
+}
