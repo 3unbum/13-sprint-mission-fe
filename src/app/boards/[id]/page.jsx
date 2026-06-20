@@ -1,7 +1,6 @@
 import { getArticle, getComments } from "@/lib/api";
 import { withFake } from "@/lib/fakeData";
 import CommentList from "@/app/boards/[id]/_components/CommentList";
-import CommentForm from "@/app/boards/[id]/_components/CommentForm";
 import { formatDate } from "@/lib/formatDate";
 import Link from "next/link";
 import Image from "next/image";
@@ -69,14 +68,11 @@ export default async function ArticleDetailPage({ params }) {
       {/* 댓글 */}
       <section className="mt-8">
         <h2 className="mb-4 text-base font-semibold text-gray-900">댓글달기</h2>
-        <CommentForm articleId={article.id} />
-        <div className="mt-6">
-          <CommentList
-            initialComments={commentsData.list}
-            initialCursor={commentsData.nextCursor}
-            articleId={article.id}
-          />
-        </div>
+        <CommentList
+          initialComments={commentsData.list}
+          initialCursor={commentsData.nextCursor}
+          articleId={article.id}
+        />
       </section>
 
       {/* 목록으로 돌아가기 */}

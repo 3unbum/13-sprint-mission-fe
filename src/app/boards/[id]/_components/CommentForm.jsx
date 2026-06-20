@@ -3,16 +3,19 @@
 import { useState } from "react";
 import { createCommentAction } from "../actions";
 
-// 댓글 작성 폼 (client - 등록 버튼 활성/비활성 + 등록 후 입력창 비우기)
-export default function CommentForm({ articleId }) {
+// 댓글 작성 폼. 등록 후 결과를 onAdd로 부모(CommentList)에 넘겨 목록에 즉시 반영.
+export default function CommentForm({ articleId, onAdd }) {
   const [content, setContent] = useState("");
 
   // articleId를 액션의 첫 인자로 미리 묶는다 (FormData는 React가 뒤에 붙임)
   const action = createCommentAction.bind(null, articleId);
 
   async function handleAction(formData) {
-    await action(formData);
-    setContent(""); // 등록 성공 후 입력창 비우기
+    const created = await action(formData);
+    if (created) {
+      onAdd(created); // 부모 state에 추가 -> 즉시 화면 반영
+      setContent("");
+    }
   }
 
   return (

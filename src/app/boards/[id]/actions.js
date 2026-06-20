@@ -8,20 +8,18 @@ import {
   updateComment,
   deleteComment,
 } from "@/lib/api";
+import { withFakeComment } from "@/lib/fakeData";
 
-// 댓글 등록 Server Action.
-// articleId는 폼에서 .bind로 미리 묶어 넘간다 (FormData엔 content만).
+// 댓글 등록 - 생성된 댓글(가짜 닉네임 포함)을 반환해 client가 목록에 즉시 추가.
 export async function createCommentAction(articleId, formData) {
   const content = formData.get("content")?.trim();
-  if (!content) return;
+  if (!content) return null;
 
-  await createComment(articleId, content);
-
-  revalidatePath(`/boards/${articleId}`); // 상세 페이지 갱신 -> 새 댓글 반영
+  const comment = await createComment(articleId, content);
+  return withFakeComment(comment);
 }
 
-// 게시글  삭제 Server Action
-// 삭제 후엔 머물 상세 페이지가 사라지므로 목록으로 보낸다.
+// 게시글 삭제 (변경 없음 - 목록으로 이동)
 export async function deleteArticleAction(id) {
   await deleteArticle(id);
 
@@ -29,20 +27,16 @@ export async function deleteArticleAction(id) {
   redirect("/boards");
 }
 
-// 댓글 수정 Server Action
-// commentId·articleId를 .bind로 미리 묶고, content만 FormData로 받는다.
-export async function updateCommentAction(commentId, articleId, formData) {
+// 댓글 수정 - 수정된 댓글을 반환해 client가 해당 항목 교체
+export async function updateCommentAction(commentId, formData) {
   const content = formData.get("content")?.trim();
-  if (!content) return;
+  if (!content) return null;
 
-  await updateComment(commentId, content);
-
-  revalidatePath(`/boards/${articleId}`); // 상세 갱신 -> 수정된 댓글 반영
+  const comment = await updateComment(commentId, content);
+  return withFakeComment(comment);
 }
 
-// 댓글 삭제 Server Action
-export async function deleteCommentAction(commentId, articleId) {
+// 댓글 삭제 성공 여부만 (client가 목록에서 제거)
+export async function deleteCommentAction(commentId) {
   await deleteComment(commentId);
-
-  revalidatePath(`/boards/${articleId}`); // 상세 갱신 -> 삭제된 댓글 사라짐
 }
