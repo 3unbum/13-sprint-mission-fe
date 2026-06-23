@@ -160,3 +160,64 @@ export async function deleteComment(commentId) {
     parse: false,
   });
 }
+
+// --- 게시글 ---
+
+export async function getArticles({
+  page = 1,
+  pageSize = 10,
+  keyword = "",
+  orderBy = "recent",
+} = {}) {
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+    orderBy,
+  });
+  if (keyword) params.set("keyword", keyword);
+  return apiFetch(`/articles?${params}`, { cache: "no-store" });
+}
+
+export async function getBestArticles() {
+  const { list } = await getArticles({ pageSize: 30 });
+  return list;
+}
+
+export async function getArticle(id) {
+  return apiFetch(`/articles/${id}`, { cache: "no-store" });
+}
+
+export async function createArticle({ title, content }) {
+  return tokenFetch(`/articles`, {
+    ...jsonBody("POST", { title, content }),
+  });
+}
+
+export async function updateArticle(id, { title, content }) {
+  return tokenFetch(`/articles/${id}`, {
+    ...jsonBody("PATCH", { title, content }),
+  });
+}
+
+export async function deleteArticle(id) {
+  return tokenFetch(`/articles/${id}`, {
+    method: "DELETE",
+    parse: false,
+  });
+}
+
+// --- 댓글 (게시글) ---
+
+export async function getComments(articleId, { cursor, limit = 5 } = {}) {
+  const params = new URLSearchParams({ limit: String(limit) });
+  if (cursor) params.set("cursor", String(cursor));
+  return apiFetch(`/articles/${articleId}/comments?${params}`, {
+    cache: "no-store",
+  });
+}
+
+export async function createComment(articleId, content) {
+  return tokenFetch(`/articles/${articleId}/comments`, {
+    ...jsonBody("POST", { content }),
+  });
+}
