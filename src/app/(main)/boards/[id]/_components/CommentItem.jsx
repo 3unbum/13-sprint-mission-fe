@@ -7,7 +7,7 @@ import KebabMenu from "@/components/common/KebabMenu";
 import {
   updateCommentAction,
   deleteCommentAction,
-} from "@/app/boards/[id]/actions";
+} from "@/app/(main)/boards/[id]/actions";
 
 // 댓글 한 개. 보기 <-> 인라인 편집 두 모드를 가져 client로 둔다.
 export default function CommentItem({ comment, onUpdate, onRemove }) {

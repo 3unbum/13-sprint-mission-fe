@@ -1,11 +1,11 @@
 import { getArticle, getComments } from "@/lib/api";
 import { withFake } from "@/lib/fakeData";
-import CommentList from "@/app/boards/[id]/_components/CommentList";
+import CommentList from "@/app/(main)/boards/[id]/_components/CommentList";
 import { formatDate } from "@/lib/formatDate";
 import Link from "next/link";
 import Image from "next/image";
 import KebabMenu from "@/components/common/KebabMenu";
-import { deleteArticleAction } from "@/app/boards/[id]/actions";
+import { deleteArticleAction } from "@/app/(main)/boards/[id]/actions";
 import Avatar from "@/components/common/Avatar";
 
 // 게시글 상세 (서버 컴포넌트)

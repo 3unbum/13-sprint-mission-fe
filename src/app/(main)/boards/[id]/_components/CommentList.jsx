@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import CommentItem from "@/app/boards/[id]/_components/CommentItem";
-import CommentForm from "@/app/boards/[id]/_components/CommentForm";
+import CommentItem from "@/app/(main)/boards/[id]/_components/CommentItem";
+import CommentForm from "@/app/(main)/boards/[id]/_components/CommentForm";
 import { getComments } from "@/lib/api";
 import { withFakeComment } from "@/lib/fakeData";
 

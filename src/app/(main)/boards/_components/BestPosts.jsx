@@ -1,6 +1,6 @@
 import { getBestArticles } from "@/lib/api";
 import { withFake } from "@/lib/fakeData";
-import BestPostCard from "@/app/boards/_components/BestPostCard";
+import BestPostCard from "@/app/(main)/boards/_components/BestPostCard";
 
 // 베스트 게시글 묶음 (서버 컴포넌트)
 // 백엔드에 좋아요가 없어 가짜 likeCount 상위 3개를 뽑는다.

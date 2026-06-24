@@ -1,5 +1,5 @@
-import ArticleForm from "@/app/boards/write/_components/ArticleForm";
-import { createArticleAction } from "@/app/boards/write/actions";
+import ArticleForm from "@/app/(main)/boards/write/_components/ArticleForm";
+import { createArticleAction } from "@/app/(main)/boards/write/actions";
 
 // 게시글 등록 페이지 (서버 컴포넌트 - 폼만 배치)
 export default function WritePage() {
