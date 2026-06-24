@@ -33,7 +33,7 @@ export default function CommentList({
   async function handleLoadMore() {
     setLoading(true);
     try {
-      const data = await getComments(articleId, { cursor, withCache: false });
+      const data = await getComments(articleId, { cursor, noStore: false });
       setComments((prev) => [...prev, ...data.list.map(withFakeComment)]);
       setCursor(data.nextCursor);
     } finally {

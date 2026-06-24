@@ -32,7 +32,7 @@ async function tokenFetch(path, { parse = true, ...options } = {}) {
 }
 
 // 인증 불필요한 기본 fetch 래퍼
-async function apiFetch(path, { parse = true, ...options } = {}) {
+async function apiFetch(path, { errorMessage, parse = true, ...options } = {}) {
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: { "Content-Type": "application/json" },
     ...options,
@@ -40,7 +40,10 @@ async function apiFetch(path, { parse = true, ...options } = {}) {
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new Error(body.message ?? `요청에 실패했어요. (${res.status})`);
+    // 서버가 준 메시지 우선 -> 호출부 errorMessage -> 기본 문구 순
+    throw new Error(
+      body.message ?? errorMessage ?? `요청에 실패했어요. (${res.status})`,
+    );
   }
 
   return parse ? res.json() : undefined;
@@ -208,11 +211,16 @@ export async function deleteArticle(id) {
 
 // --- 댓글 (게시글) ---
 
-export async function getComments(articleId, { cursor, limit = 5 } = {}) {
+// 댓글 목록 (cursor 페이지네이션). noStore=false면 client 더보기용(브라우저 fetch).
+export async function getComments(
+  articleId,
+  { cursor, limit = 5, noStore = true } = {},
+) {
   const params = new URLSearchParams({ limit: String(limit) });
   if (cursor) params.set("cursor", String(cursor));
   return apiFetch(`/articles/${articleId}/comments?${params}`, {
-    cache: "no-store",
+    ...(noStore ? { cache: "no-store" } : {}),
+    errorMessage: "댓글을 불러오지 못했어요.",
   });
 }
 
