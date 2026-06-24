@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Avatar from "@/components/common/Avatar";
-import { formatRelative } from "@/lib/formatDate";
+import { formatTimeAgo } from "@/lib/formatDate";
 import KebabMenu from "@/components/common/KebabMenu";
 import {
   updateCommentAction,
@@ -78,7 +78,7 @@ export default function CommentItem({ comment, onUpdate, onRemove }) {
             <div className="flex flex-col">
               <span className="text-gray-600">{comment.nickname}</span>
               <span className="text-xs" suppressHydrationWarning>
-                {formatRelative(comment.createdAt)}
+                {formatTimeAgo(comment.createdAt)}
               </span>
             </div>
           </div>

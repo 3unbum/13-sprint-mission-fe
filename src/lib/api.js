@@ -76,16 +76,16 @@ export async function deleteArticle(id) {
 
 // --- 댓글 ---
 
-// 댓글 목록 (cursor 페이지네이션). withCache=false면 client 더보기용.
+// 댓글 목록 (cursor 페이지네이션). noStore=false면 client 더보기용(브라우저 fetch).
 export async function getComments(
   articleId,
-  { cursor, limit = 5, withCache = true } = {},
+  { cursor, limit = 5, noStore = true } = {},
 ) {
   const params = new URLSearchParams({ limit: String(limit) });
   if (cursor) params.set("cursor", String(cursor));
 
   return apiFetch(`/articles/${articleId}/comments?${params}`, {
-    ...(withCache ? { cache: "no-store" } : {}),
+    ...(noStore ? { cache: "no-store" } : {}),
     errorMessage: "댓글을 불러오지 못했어요.",
   });
 }

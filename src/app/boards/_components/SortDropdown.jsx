@@ -17,7 +17,7 @@ export default function SortDropdown() {
 
   const current = searchParams.get("sort") ?? "recent";
   const currentLabel =
-    OPTIONS.find((o) => o.value === current)?.label ?? "최신순";
+    OPTIONS.find((option) => option.value === current)?.label ?? "최신순";
 
   function handleSelect(value) {
     const params = new URLSearchParams(searchParams);
@@ -54,14 +54,14 @@ export default function SortDropdown() {
 
       {open && (
         <ul className="absolute right-0 z-10 mt-1 w-32 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md">
-          {OPTIONS.map((o) => (
-            <li key={o.value}>
+          {OPTIONS.map((option) => (
+            <li key={option.value}>
               <button
                 type="button"
-                onClick={() => handleSelect(o.value)}
+                onClick={() => handleSelect(option.value)}
                 className="block w-full px-4 py-3 text-left text-base text-gray-800 hover:bg-gray-50"
               >
-                {o.label}
+                {option.label}
               </button>
             </li>
           ))}
