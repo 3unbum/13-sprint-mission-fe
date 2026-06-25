@@ -45,7 +45,7 @@ export default function SortDropdown() {
         <span className="hidden md:inline">{currentLabel}</span>
         <Image
           src="/icons/ic_arrow_down.svg"
-          alt=""
+          alt="정렬 옵션 펼치기"
           width={20}
           height={20}
           className="hidden md:inline"

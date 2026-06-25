@@ -5,7 +5,7 @@ export default function Avatar({ size = 24 }) {
   return (
     <Image
       src="/images/profile.png"
-      alt=""
+      alt="프로필 이미지"
       width={size}
       height={size}
       className="rounded-full"

@@ -50,7 +50,7 @@ export default function CommentList({
           <div className="flex flex-col items-center py-20">
             <Image
               src="/images/empty-comment.png"
-              alt=""
+              alt="아직 등록된 문의가 없어요"
               width={140}
               height={140}
             />
