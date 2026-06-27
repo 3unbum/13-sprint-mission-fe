@@ -15,6 +15,7 @@ import Avatar from "@/components/common/Avatar";
 import { formatDate } from "@/lib/formatDate";
 import { useAuth } from "@/providers/AuthProvider";
 import KebabMenu from "@/components/common/KebabMenu";
+import CommentSection from "@/app/(main)/items/[id]/_components/CommentSection";
 
 export default function ItemDetailPage({ params }) {
   // Next 16: params는 Promise라 use()로 언래핑
@@ -180,6 +181,9 @@ export default function ItemDetailPage({ params }) {
 
       {/*  상품 정보 영역 아래 가로 구분선 */}
       <hr className="mt-6 border-gray-200" />
+
+      {/* 문의(댓글) 영역 */}
+      <CommentSection productId={id} />
 
       {/* 목록으로 돌아가기 */}
       <div className="mt-10 flex justify-center">
