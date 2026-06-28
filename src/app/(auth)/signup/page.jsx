@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { useAuth } from "@/providers/AuthProvider";
 
 function ErrorModal({ message, onClose }) {
@@ -26,17 +27,21 @@ function ErrorModal({ message, onClose }) {
 
 export default function SignupPage() {
   const router = useRouter();
-  const { register } = useAuth();
+  const { register: registerUser } = useAuth(); // rhf register와 충돌 피해 별칭
 
-  const [email, setEmail] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [passwordConfirmError, setPasswordConfirmError] = useState("");
-  const [modalMessage, setModalMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm({ mode: "onChange" });
+
+  // 비밀번호 확인 일치 검사용 - 현재 password 값을 추적
+  const password = watch("password");
 
   // 이미 로그인된 상태면 /items로 리다이렉트
   useEffect(() => {
@@ -44,37 +49,20 @@ export default function SignupPage() {
     if (token) router.replace("/items");
   }, [router]);
 
-  const isFormValid =
-    email.trim() !== "" &&
-    nickname.trim() !== "" &&
-    password.trim() !== "" &&
-    passwordConfirmation.trim() !== "";
-
-  const handlePasswordConfirmChange = (e) => {
-    setPasswordConfirmation(e.target.value);
-    if (e.target.value && e.target.value !== password) {
-      setPasswordConfirmError("비밀번호가 일치하지 않아요.");
-    } else {
-      setPasswordConfirmError("");
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (password !== passwordConfirmation) {
-      setPasswordConfirmError("비밀번호가 일치하지 않아요.");
-      return;
-    }
-    setLoading(true);
+  // 검증 통과 시에만 호출됨
+  const onSubmit = async ({
+    email,
+    nickname,
+    password,
+    passwordConfirmation,
+  }) => {
     try {
-      await register(email, nickname, password, passwordConfirmation);
+      await registerUser(email, nickname, password, passwordConfirmation);
       router.push("/items");
     } catch (err) {
       setModalMessage(
         err?.message ?? "회원가입에 실패했어요. 다시 시도해주세요.",
       );
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -107,7 +95,7 @@ export default function SignupPage() {
         </Link>
 
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className="flex w-full max-w-[343px] flex-col gap-6 md:max-w-[640px]"
         >
           {/* 이메일 */}
@@ -122,10 +110,18 @@ export default function SignupPage() {
               id="email"
               type="email"
               placeholder="이메일을 입력해주세요"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-14 rounded-xl bg-gray-100 px-6 text-base outline-none focus:ring-2 focus:ring-brand-blue"
+              {...register("email", {
+                required: "이메일을 입력해 주세요.",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "잘못된 이메일 형식이에요.",
+                },
+              })}
+              className={`h-14 rounded-xl bg-gray-100 px-6 text-base outline-none focus:ring-2 focus:ring-brand-blue ${errors.email ? "ring-2 ring-red-500" : ""}`}
             />
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )}
           </div>
 
           {/* 닉네임 */}
@@ -140,10 +136,14 @@ export default function SignupPage() {
               id="nickname"
               type="text"
               placeholder="닉네임을 입력해주세요"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              className="h-14 rounded-xl bg-gray-100 px-6 text-base outline-none focus:ring-2 focus:ring-brand-blue"
+              {...register("nickname", {
+                required: "닉네임을 입력해 주세요.",
+              })}
+              className={`h-14 rounded-xl bg-gray-100 px-6 text-base outline-none focus:ring-2 focus:ring-brand-blue ${errors.nickname ? "ring-2 ring-red-500" : ""}`}
             />
+            {errors.nickname && (
+              <p className="text-sm text-red-500">{errors.nickname.message}</p>
+            )}
           </div>
 
           {/* 비밀번호 */}
@@ -159,9 +159,14 @@ export default function SignupPage() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="비밀번호를 입력해주세요"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="h-14 w-full rounded-xl bg-gray-100 px-6 pr-14 text-base outline-none focus:ring-2 focus:ring-brand-blue"
+                {...register("password", {
+                  required: "비밀번호를 입력해 주세요.",
+                  minLength: {
+                    value: 8,
+                    message: "비밀번호를 8자 이상 입력해 주세요.",
+                  },
+                })}
+                className={`h-14 w-full rounded-xl bg-gray-100 px-6 pr-14 text-base outline-none focus:ring-2 focus:ring-brand-blue ${errors.password ? "ring-2 ring-red-500" : ""}`}
               />
               <button
                 type="button"
@@ -181,6 +186,9 @@ export default function SignupPage() {
                 />
               </button>
             </div>
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
+            )}
           </div>
 
           {/* 비밀번호 확인 */}
@@ -196,9 +204,12 @@ export default function SignupPage() {
                 id="passwordConfirmation"
                 type={showPasswordConfirm ? "text" : "password"}
                 placeholder="비밀번호를 다시 입력해주세요"
-                value={passwordConfirmation}
-                onChange={handlePasswordConfirmChange}
-                className={`h-14 w-full rounded-xl bg-gray-100 px-6 pr-14 text-base outline-none focus:ring-2 focus:ring-brand-blue ${passwordConfirmError ? "ring-2 ring-red-500" : ""}`}
+                {...register("passwordConfirmation", {
+                  required: "비밀번호를 다시 입력해 주세요.",
+                  validate: (value) =>
+                    value === password || "비밀번호가 일치하지 않아요.",
+                })}
+                className={`h-14 w-full rounded-xl bg-gray-100 px-6 pr-14 text-base outline-none focus:ring-2 focus:ring-brand-blue ${errors.passwordConfirmation ? "ring-2 ring-red-500" : ""}`}
               />
               <button
                 type="button"
@@ -222,18 +233,20 @@ export default function SignupPage() {
                 />
               </button>
             </div>
-            {passwordConfirmError && (
-              <p className="text-sm text-red-500">{passwordConfirmError}</p>
+            {errors.passwordConfirmation && (
+              <p className="text-sm text-red-500">
+                {errors.passwordConfirmation.message}
+              </p>
             )}
           </div>
 
           {/* 회원가입 버튼 */}
           <button
             type="submit"
-            disabled={!isFormValid || !!passwordConfirmError || loading}
+            disabled={!isValid || isSubmitting}
             className="h-14 rounded-full bg-brand-blue text-xl font-semibold text-white disabled:opacity-50"
           >
-            {loading ? "가입 중..." : "회원가입"}
+            {isSubmitting ? "가입 중..." : "회원가입"}
           </button>
         </form>
 

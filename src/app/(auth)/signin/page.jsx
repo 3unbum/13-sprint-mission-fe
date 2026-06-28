@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { useAuth } from "@/providers/AuthProvider";
 
 // 로그인/회원가입 실패 시 띄우는 모달
@@ -29,13 +30,15 @@ export default function SigninPage() {
   const router = useRouter();
   const { login } = useAuth();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [modalMessage, setModalMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm({ mode: "onChange" });
 
   // 이미 로그인된 상태면 /items로 리다이렉트
   useEffect(() => {
@@ -43,29 +46,22 @@ export default function SigninPage() {
     if (token) router.replace("/items");
   }, [router]);
 
-  const isFormValid = email.trim() !== "" && password.trim() !== "";
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setEmailError("");
-    setPasswordError("");
-    setLoading(true);
+  // 검증 통과 시에만 호출됨 (data = { email, password })
+  const onSubmit = async ({ email, password }) => {
     try {
       await login(email, password);
       router.push("/items");
     } catch (err) {
       const msg = err?.message ?? "";
       if (msg.includes("이메일") || msg.includes("email")) {
-        setEmailError("이메일을 확인해 주세요.");
+        setError("email", { message: "이메일을 확인해 주세요." });
       } else if (msg.includes("비밀번호") || msg.includes("password")) {
-        setPasswordError("비밀번호를 확인해 주세요.");
+        setError("password", { message: "비밀번호를 확인해 주세요." });
       } else {
         setModalMessage(
           "로그인에 실패했어요. 이메일 또는 비밀번호를 확인해 주세요.",
         );
       }
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -98,7 +94,7 @@ export default function SigninPage() {
         </Link>
 
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className="flex w-full max-w-[343px] flex-col gap-6 md:max-w-[640px]"
         >
           {/* 이메일 */}
@@ -113,14 +109,18 @@ export default function SigninPage() {
               id="email"
               type="email"
               placeholder="이메일을 입력해주세요"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setEmailError("");
-              }}
-              className={`h-14 rounded-xl bg-gray-100 px-6 text-base outline-none focus:ring-2 focus:ring-brand-blue ${emailError ? "ring-2 ring-red-500" : ""}`}
+              {...register("email", {
+                required: "이메일을 입력해 주세요.",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "잘못된 이메일 형식이에요.",
+                },
+              })}
+              className={`h-14 rounded-xl bg-gray-100 px-6 text-base outline-none focus:ring-2 focus:ring-brand-blue ${errors.email ? "ring-2 ring-red-500" : ""}`}
             />
-            {emailError && <p className="text-sm text-red-500">{emailError}</p>}
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )}
           </div>
 
           {/* 비밀번호 */}
@@ -136,12 +136,14 @@ export default function SigninPage() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="비밀번호를 입력해주세요"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError("");
-                }}
-                className={`h-14 w-full rounded-xl bg-gray-100 px-6 pr-14 text-base outline-none focus:ring-2 focus:ring-brand-blue ${passwordError ? "ring-2 ring-red-500" : ""}`}
+                {...register("password", {
+                  required: "비밀번호를 입력해 주세요.",
+                  minLength: {
+                    value: 8,
+                    message: "비밀번호를 8자 이상 입력해 주세요.",
+                  },
+                })}
+                className={`h-14 w-full rounded-xl bg-gray-100 px-6 pr-14 text-base outline-none focus:ring-2 focus:ring-brand-blue ${errors.password ? "ring-2 ring-red-500" : ""}`}
               />
               <button
                 type="button"
@@ -161,18 +163,18 @@ export default function SigninPage() {
                 />
               </button>
             </div>
-            {passwordError && (
-              <p className="text-sm text-red-500">{passwordError}</p>
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
 
           {/* 로그인 버튼 */}
           <button
             type="submit"
-            disabled={!isFormValid || loading}
+            disabled={!isValid || isSubmitting}
             className="h-14 rounded-full bg-brand-blue text-xl font-semibold text-white disabled:opacity-50"
           >
-            {loading ? "로그인 중..." : "로그인"}
+            {isSubmitting ? "로그인 중..." : "로그인"}
           </button>
         </form>
 

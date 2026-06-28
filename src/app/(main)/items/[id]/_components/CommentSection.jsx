@@ -65,10 +65,10 @@ export default function CommentSection({ productId }) {
           // 빈 상태
           <div className="flex flex-col items-center gap-4 py-16">
             <Image
-              src="/images/empty-comment.png"
+              src="/icons/ic_empty_inquiry.svg"
               alt="아직 문의가 없어요"
-              width={140}
-              height={140}
+              width={196}
+              height={196}
             />
             <p className="text-base text-gray-400">아직 문의가 없어요</p>
           </div>
