@@ -101,6 +101,13 @@ export async function getProduct(id) {
   return tokenFetch(`/products/${id}`);
 }
 
+// 상품 등록 (토큰 필요)
+export async function createProduct(data) {
+  return tokenFetch("/products", {
+    ...jsonBody("POST", data),
+  });
+}
+
 // 상품 수정 (토큰 필요)
 export async function updateProduct(id, data) {
   return tokenFetch(`/products/${id}`, {
