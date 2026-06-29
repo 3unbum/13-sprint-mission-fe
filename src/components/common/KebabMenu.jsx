@@ -27,7 +27,7 @@ export default function KebabMenu({ children }) {
         aria-label="메뉴 열기"
         className="flex h-6 w-6 items-center justify-center text-gray-400"
       >
-        <Image src="/icons/ic_kebab.svg" alt="메뉴 열기" width={24} height={24} />
+        <Image src="/icons/ui/ic_kebab.svg" alt="메뉴 열기" width={24} height={24} />
       </button>
 
       {open && (

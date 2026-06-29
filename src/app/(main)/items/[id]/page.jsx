@@ -165,8 +165,8 @@ export default function ItemDetailPage({ params }) {
                 <Image
                   src={
                     product.isFavorite
-                      ? "/icons/ic_heart_active.svg"
-                      : "/icons/ic_heart_inactive.svg"
+                      ? "/icons/ui/ic_heart_active.svg"
+                      : "/icons/ui/ic_heart_inactive.svg"
                   }
                   alt="좋아요"
                   width={20}
@@ -193,7 +193,7 @@ export default function ItemDetailPage({ params }) {
         >
           목록으로 돌아가기
           <Image
-            src="/icons/ic_back.svg"
+            src="/icons/ui/ic_back.svg"
             alt="목록으로 돌아가기"
             width={20}
             height={20}

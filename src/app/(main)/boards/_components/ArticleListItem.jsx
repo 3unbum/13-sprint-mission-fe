@@ -33,7 +33,7 @@ export default function ArticleListItem({ article }) {
           </div>
           <span className="flex items-center gap-1">
             <Image
-              src="/icons/ic_heart_inactive.svg"
+              src="/icons/ui/ic_heart_inactive.svg"
               alt="좋아요"
               width={16}
               height={16}

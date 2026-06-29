@@ -154,8 +154,8 @@ export default function SigninPage() {
                 <Image
                   src={
                     showPassword
-                      ? "/icons/eye_open.svg"
-                      : "/icons/eye_closed.svg"
+                      ? "/icons/auth/eye_open.svg"
+                      : "/icons/auth/eye_closed.svg"
                   }
                   alt={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
                   width={24}
@@ -189,12 +189,13 @@ export default function SigninPage() {
               target="_blank"
               rel="noreferrer"
               aria-label="구글로 로그인"
+              className="flex h-[42px] w-[42px] items-center justify-center rounded-full bg-white"
             >
               <Image
-                src="/icons/ic_google.svg"
+                src="/icons/auth/ic_google.svg"
                 alt="Google"
-                width={42}
-                height={42}
+                width={24}
+                height={24}
               />
             </a>
             <a
@@ -202,12 +203,13 @@ export default function SigninPage() {
               target="_blank"
               rel="noreferrer"
               aria-label="카카오로 로그인"
+              className="flex h-[42px] w-[42px] items-center justify-center rounded-full bg-[#fee500]"
             >
               <Image
-                src="/icons/ic_kakao.svg"
+                src="/icons/auth/ic_kakao.svg"
                 alt="Kakao"
-                width={42}
-                height={42}
+                width={24}
+                height={24}
               />
             </a>
           </div>

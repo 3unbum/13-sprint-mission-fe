@@ -36,7 +36,7 @@ export default function SortDropdown() {
       >
         {/* 모바일: 정렬 아이콘만 / 태블릿+: 라벨 + 화살표 */}
         <Image
-          src="/icons/ic_sort.svg"
+          src="/icons/ui/ic_sort.svg"
           alt="정렬"
           width={24}
           height={24}
@@ -44,7 +44,7 @@ export default function SortDropdown() {
         />
         <span className="hidden md:inline">{currentLabel}</span>
         <Image
-          src="/icons/ic_arrow_down.svg"
+          src="/icons/ui/ic_arrow_down.svg"
           alt="정렬 옵션 펼치기"
           width={20}
           height={20}

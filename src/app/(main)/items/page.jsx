@@ -82,7 +82,7 @@ export default function ItemsPage() {
               setOrderBy(e.target.value);
               setPage(1); // 검색하면 첫 페이지로
             }}
-            className="h-11 cursor-pointer appearance-none rounded-lg border border-gray-200 bg-[url('/icons/ic_arrow_down.svg')] bg-[length:20px] bg-[right_0.75rem_center] bg-no-repeat py-2 pl-3 pr-9 text-base text-gray-800"
+            className="h-11 cursor-pointer appearance-none rounded-lg border border-gray-200 bg-[url('/icons/ui/ic_arrow_down.svg')] bg-[length:20px] bg-[right_0.75rem_center] bg-no-repeat py-2 pl-3 pr-9 text-base text-gray-800"
           >
             <option value="recent">최신순</option>
             <option value="favorite">좋아요순</option>

@@ -51,7 +51,7 @@ export default async function ArticleDetailPage({ params }) {
           <span>{formatDate(article.createdAt)}</span>
           <span className="ml-4 flex items-center gap-1 border-l border-gray-200 pl-4">
             <Image
-              src="/icons/ic_heart_inactive.svg"
+              src="/icons/ui/ic_heart_inactive.svg"
               alt="좋아요"
               width={20}
               height={20}
@@ -83,7 +83,7 @@ export default async function ArticleDetailPage({ params }) {
         >
           목록으로 돌아가기
           <Image
-            src="/icons/ic_back.svg"
+            src="/icons/ui/ic_back.svg"
             alt="목록으로 돌아가기"
             width={24}
             height={24}
