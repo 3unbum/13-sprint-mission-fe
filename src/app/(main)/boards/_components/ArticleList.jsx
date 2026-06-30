@@ -1,4 +1,4 @@
-import ArticleListItem from "@/app/boards/_components/ArticleListItem";
+import ArticleListItem from "@/app/(main)/boards/_components/ArticleListItem";
 
 // 게시글 목록 (서버 컴포넌트)
 export default function ArticleList({ articles }) {

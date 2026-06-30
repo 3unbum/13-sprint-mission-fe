@@ -1,11 +1,11 @@
 import { getArticle, getComments } from "@/lib/api";
 import { withFake } from "@/lib/fakeData";
-import CommentList from "@/app/boards/[id]/_components/CommentList";
+import CommentList from "@/app/(main)/boards/[id]/_components/CommentList";
 import { formatDate } from "@/lib/formatDate";
 import Link from "next/link";
 import Image from "next/image";
 import KebabMenu from "@/components/common/KebabMenu";
-import { deleteArticleAction } from "@/app/boards/[id]/actions";
+import { deleteArticleAction } from "@/app/(main)/boards/[id]/actions";
 import Avatar from "@/components/common/Avatar";
 
 // 게시글 상세 (서버 컴포넌트)
@@ -51,8 +51,8 @@ export default async function ArticleDetailPage({ params }) {
           <span>{formatDate(article.createdAt)}</span>
           <span className="ml-4 flex items-center gap-1 border-l border-gray-200 pl-4">
             <Image
-              src="/icons/ic_heart_inactive.svg"
-              alt=""
+              src="/icons/ui/ic_heart_inactive.svg"
+              alt="좋아요"
               width={20}
               height={20}
             />
@@ -82,7 +82,12 @@ export default async function ArticleDetailPage({ params }) {
           className="flex h-12 items-center gap-2 rounded-full bg-brand-blue px-6 text-base font-semibold text-white"
         >
           목록으로 돌아가기
-          <Image src="/icons/ic_back.svg" alt="" width={24} height={24} />
+          <Image
+            src="/icons/ui/ic_back.svg"
+            alt="목록으로 돌아가기"
+            width={24}
+            height={24}
+          />
         </Link>
       </div>
     </div>

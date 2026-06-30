@@ -1,20 +1,174 @@
-import { BASE_URL } from "@/lib/config";
+import { BASE_URL } from "@/lib/config.js";
 
-// 공통 fetch 래퍼. fetch는 4xx/5xx에 reject 안 하므로 res.ok를 직접 확인한다
-// DELETE처럼 본문 없는 응답은 json 파싱을 건너뛴다
-async function apiFetch(path, { errorMessage, parse = true, ...options } = {}) {
-  const res = await fetch(`${BASE_URL}${path}`, options);
-  if (!res.ok) throw new Error(`${errorMessage} (${res.status})`);
+// localStorage에서 accessToken을 읽어 Authorization 헤더를 붙이는 fetch 래퍼.
+// 401이 오면 토큰을 지우고 로그인 페이지로 이동한다.
+async function tokenFetch(path, { parse = true, ...options } = {}) {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
+
+  const res = await fetch(`${BASE_URL}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
+  });
+
+  if (res.status === 401) {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("access_token");
+      window.location.href = "/signin";
+    }
+    throw new Error("인증이 필요해요. 다시 로그인해 주세요.");
+  }
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message ?? `요청에 실패했어요. (${res.status})`);
+  }
+
   return parse ? res.json() : undefined;
 }
 
-// POST/PATCH 공통 옵션 (JSON 본문)
-function jsonBody(method, body) {
-  return {
-    method,
+// 인증 불필요한 기본 fetch 래퍼
+async function apiFetch(path, { errorMessage, parse = true, ...options } = {}) {
+  const res = await fetch(`${BASE_URL}${path}`, {
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  };
+    ...options,
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    // 서버가 준 메시지 우선 -> 호출부 errorMessage -> 기본 문구 순
+    throw new Error(
+      body.message ?? errorMessage ?? `요청에 실패했어요. (${res.status})`,
+    );
+  }
+
+  return parse ? res.json() : undefined;
+}
+
+// JSON 본문 옵션 헬퍼
+function jsonBody(method, body) {
+  return { method, body: JSON.stringify(body) };
+}
+
+// --- 인증 ---
+
+// 로그인. 성공하면 { accessToken, refreshToken, user } 반환
+export async function signIn(email, password) {
+  return apiFetch("/auth/signIn", {
+    ...jsonBody("POST", { email, password }),
+  });
+}
+
+// 회원가입. 성공하면 { accessToken, refreshToken, user } 반환
+export async function signUp(email, nickname, password, passwordConfirmation) {
+  return apiFetch("/auth/signUp", {
+    ...jsonBody("POST", { email, nickname, password, passwordConfirmation }),
+  });
+}
+
+// --- 유저 ---
+
+// 내 정보 조회 (토큰 필요)
+export async function getMe() {
+  return tokenFetch("/users/me");
+}
+
+// --- 상품 ---
+
+export async function getProducts({
+  page = 1,
+  pageSize = 10,
+  keyword = "",
+  orderBy = "recent", // "recent" | "favorite"
+} = {}) {
+  const params = new URLSearchParams({
+    page: String(page),
+    pageSize: String(pageSize),
+    orderBy,
+  });
+  if (keyword) params.set("keyword", keyword);
+
+  // 상품 목록은 비로그인도 볼 수 있어요
+  return apiFetch(`/products?${params}`, { cache: "no-store" });
+}
+
+// 상품 상세 (토큰 필요 - 요구사항: 인가된 사용자만)
+export async function getProduct(id) {
+  return tokenFetch(`/products/${id}`);
+}
+
+// 상품 등록 (토큰 필요)
+export async function createProduct(data) {
+  return tokenFetch("/products", {
+    ...jsonBody("POST", data),
+  });
+}
+
+// 상품 수정 (토큰 필요)
+export async function updateProduct(id, data) {
+  return tokenFetch(`/products/${id}`, {
+    ...jsonBody("PATCH", data),
+  });
+}
+
+// 상품 삭제 (토큰 필요)
+export async function deleteProduct(id) {
+  return tokenFetch(`/products/${id}`, {
+    method: "DELETE",
+    parse: false,
+  });
+}
+
+// 좋아요 추가 (토큰 필요)
+export async function favoriteProduct(id) {
+  return tokenFetch(`/products/${id}/favorite`, { method: "POST" });
+}
+
+// 좋아요 취소 (토큰 필요)
+export async function unfavoriteProduct(id) {
+  return tokenFetch(`/products/${id}/favorite`, {
+    method: "DELETE",
+    parse: false,
+  });
+}
+
+// --- 댓글 (상품) ---
+
+// cursor 페이지네이션
+export async function getProductComments(
+  productId,
+  { cursor, limit = 10 } = {},
+) {
+  const params = new URLSearchParams({ limit: String(limit) });
+  if (cursor) params.set("cursor", String(cursor));
+
+  return tokenFetch(`/products/${productId}/comments?${params}`);
+}
+
+// 댓글 등록 (토큰 필요)
+export async function createProductComment(productId, content) {
+  return tokenFetch(`/products/${productId}/comments`, {
+    ...jsonBody("POST", { content }),
+  });
+}
+
+// 댓글 수정 (토큰 필요)
+export async function updateComment(commentId, content) {
+  return tokenFetch(`/comments/${commentId}`, {
+    ...jsonBody("PATCH", { content }),
+  });
+}
+
+// 댓글 삭제 (토큰 필요)
+export async function deleteComment(commentId) {
+  return tokenFetch(`/comments/${commentId}`, {
+    method: "DELETE",
+    parse: false,
+  });
 }
 
 // --- 게시글 ---
@@ -23,91 +177,62 @@ export async function getArticles({
   page = 1,
   pageSize = 10,
   keyword = "",
-  sort = "recent",
+  orderBy = "recent",
 } = {}) {
-  const offset = (page - 1) * pageSize; // 프론트는 page, 백엔드는 offset
   const params = new URLSearchParams({
-    offset: String(offset),
-    limit: String(pageSize),
-    sort,
+    page: String(page),
+    pageSize: String(pageSize),
+    orderBy,
   });
   if (keyword) params.set("keyword", keyword);
-
-  return apiFetch(`/articles?${params}`, {
-    cache: "no-store",
-    errorMessage: "게시글 목록을 불러오지 못했어요.",
-  });
+  return apiFetch(`/articles?${params}`, { cache: "no-store" });
 }
 
-// 백엔드가 좋아요를 안 주므로 넉넉히 받아 프론트에게 가짜 likeCount로 정렬한다.
 export async function getBestArticles() {
   const { list } = await getArticles({ pageSize: 30 });
   return list;
 }
 
-export async function createArticle({ title, content }) {
-  return apiFetch(`/articles`, {
-    ...jsonBody("POST", { title, content }),
-    errorMessage: "게시글 등록에 실패했어요",
-  });
+export async function getArticle(id) {
+  return apiFetch(`/articles/${id}`, { cache: "no-store" });
 }
 
-export async function getArticle(id) {
-  return apiFetch(`/articles/${id}`, {
-    cache: "no-store",
-    errorMessage: "게시글을 불러오지 못했어요.",
+export async function createArticle({ title, content }) {
+  return tokenFetch(`/articles`, {
+    ...jsonBody("POST", { title, content }),
   });
 }
 
 export async function updateArticle(id, { title, content }) {
-  return apiFetch(`/articles/${id}`, {
+  return tokenFetch(`/articles/${id}`, {
     ...jsonBody("PATCH", { title, content }),
-    errorMessage: "게시글 수정에 실패했어요.",
   });
 }
 
 export async function deleteArticle(id) {
-  return apiFetch(`/articles/${id}`, {
+  return tokenFetch(`/articles/${id}`, {
     method: "DELETE",
     parse: false,
-    errorMessage: "게시글 삭제에 실패했어요.",
   });
 }
 
-// --- 댓글 ---
+// --- 댓글 (게시글) ---
 
-// 댓글 목록 (cursor 페이지네이션). withCache=false면 client 더보기용.
+// 댓글 목록 (cursor 페이지네이션). noStore=false면 client 더보기용(브라우저 fetch).
 export async function getComments(
   articleId,
-  { cursor, limit = 5, withCache = true } = {},
+  { cursor, limit = 5, noStore = true } = {},
 ) {
   const params = new URLSearchParams({ limit: String(limit) });
   if (cursor) params.set("cursor", String(cursor));
-
   return apiFetch(`/articles/${articleId}/comments?${params}`, {
-    ...(withCache ? { cache: "no-store" } : {}),
+    ...(noStore ? { cache: "no-store" } : {}),
     errorMessage: "댓글을 불러오지 못했어요.",
   });
 }
 
 export async function createComment(articleId, content) {
-  return apiFetch(`/articles/${articleId}/comments`, {
+  return tokenFetch(`/articles/${articleId}/comments`, {
     ...jsonBody("POST", { content }),
-    errorMessage: "댓글 등록에 실패했어요.",
-  });
-}
-
-export async function updateComment(id, content) {
-  return apiFetch(`/comments/${id}`, {
-    ...jsonBody("PATCH", { content }),
-    errorMessage: "댓글 수정에 실패했어요.",
-  });
-}
-
-export async function deleteComment(id) {
-  return apiFetch(`/comments/${id}`, {
-    method: "DELETE",
-    parse: false,
-    errorMessage: "댓글 삭제에 실패했어요.",
   });
 }

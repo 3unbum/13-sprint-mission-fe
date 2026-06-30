@@ -4,7 +4,7 @@ import ArticleList from "./_components/ArticleList";
 import SearchBar from "./_components/SearchBar";
 import SortDropdown from "./_components/SortDropdown";
 import Link from "next/link";
-import BestPosts from "@/app/boards/_components/BestPosts";
+import BestPosts from "@/app/(main)/boards/_components/BestPosts";
 
 // 서버 컴포넌트 - searchParams를 받아 목록을 fetch한다.
 export default async function BoardsPage({ searchParams }) {

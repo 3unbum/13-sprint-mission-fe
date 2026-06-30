@@ -23,7 +23,7 @@ export default function SearchBar() {
   return (
     <form onSubmit={handleSubmit} className="relative flex-1">
       <span className="absolute top-1/2 left-4 -translate-y-1/2">
-        <Image src="/icons/ic_search.svg" alt="" width={24} height={24} />
+        <Image src="/icons/ui/ic_search.svg" alt="검색" width={24} height={24} />
       </span>
       <input
         name="keyword"

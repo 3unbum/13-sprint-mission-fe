@@ -4,22 +4,22 @@ const SOCIALS = [
   {
     name: "facebook",
     href: "https://www.facebook.com",
-    icon: "/icons/ic_facebook.svg",
+    icon: "/icons/social/ic_facebook.svg",
   },
   {
     name: "twitter",
     href: "https://twitter.com",
-    icon: "/icons/ic_twitter.svg",
+    icon: "/icons/social/ic_twitter.svg",
   },
   {
     name: "youtube",
     href: "https://www.youtube.com",
-    icon: "/icons/ic_youtube.svg",
+    icon: "/icons/social/ic_youtube.svg",
   },
   {
     name: "instagram",
     href: "https://www.instagram.com",
-    icon: "/icons/ic_instagram.svg",
+    icon: "/icons/social/ic_instagram.svg",
   },
 ];
 

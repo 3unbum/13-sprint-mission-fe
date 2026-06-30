@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/providers/AuthProvider";
 
 const NAV_LINKS = [
   { label: "자유게시판", href: "/boards" },
@@ -11,6 +12,8 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  // user가 null이면 비로그인, 있으면 로그인 상태
+  const { user } = useAuth();
 
   return (
     <header className="sticky top-0 z-100 h-[70px] w-full border-b border-gray-200 bg-white">
@@ -36,7 +39,6 @@ export default function Navbar() {
 
           <nav className="flex gap-4">
             {NAV_LINKS.map((link) => {
-              // 상세 (/boards/3)에서도 메뉴 활성 유지하려고 startsWith 사용
               const isActive = pathname.startsWith(link.href);
               return (
                 <Link
@@ -53,12 +55,28 @@ export default function Navbar() {
           </nav>
         </div>
 
-        <Link
-          href="/login"
-          className="flex h-12 w-32 items-center justify-center rounded-lg bg-brand-blue text-base font-semibold text-white"
-        >
-          로그인
-        </Link>
+        {/* 인가 상태에 따라 로그인 버튼 또는 프로필 표시 */}
+        {user ? (
+          <div className="flex flex-shrink-0 items-center gap-3">
+            <Image
+              src="/images/profile.png"
+              alt={`${user.nickname} 프로필`}
+              width={40}
+              height={40}
+              className="rounded-full object-cover"
+            />
+            <span className="hidden whitespace-nowrap text-base font-semibold text-gray-800 sm:block">
+              {user.nickname}
+            </span>
+          </div>
+        ) : (
+          <Link
+            href="/signin"
+            className="flex h-12 w-32 items-center justify-center rounded-lg bg-brand-blue text-base font-semibold text-white"
+          >
+            로그인
+          </Link>
+        )}
       </div>
     </header>
   );

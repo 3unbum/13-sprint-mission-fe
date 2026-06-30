@@ -15,8 +15,8 @@ export default function ArticleListItem({ article }) {
           </h3>
           <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-gray-200">
             <Image
-              src="/images/default-article.png"
-              alt=""
+              src={article.image ?? "/images/default-article.png"}
+              alt={article.title}
               fill
               sizes="64px"
               className="object-cover"
@@ -33,8 +33,8 @@ export default function ArticleListItem({ article }) {
           </div>
           <span className="flex items-center gap-1">
             <Image
-              src="/icons/ic_heart_inactive.svg"
-              alt=""
+              src="/icons/ui/ic_heart_inactive.svg"
+              alt="좋아요"
               width={16}
               height={16}
             />

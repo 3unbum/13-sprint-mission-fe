@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import CommentItem from "@/app/boards/[id]/_components/CommentItem";
-import CommentForm from "@/app/boards/[id]/_components/CommentForm";
+import CommentItem from "@/app/(main)/boards/[id]/_components/CommentItem";
+import CommentForm from "@/app/(main)/boards/[id]/_components/CommentForm";
 import { getComments } from "@/lib/api";
 import { withFakeComment } from "@/lib/fakeData";
 
@@ -33,7 +33,7 @@ export default function CommentList({
   async function handleLoadMore() {
     setLoading(true);
     try {
-      const data = await getComments(articleId, { cursor, withCache: false });
+      const data = await getComments(articleId, { cursor, noStore: false });
       setComments((prev) => [...prev, ...data.list.map(withFakeComment)]);
       setCursor(data.nextCursor);
     } finally {
@@ -50,7 +50,7 @@ export default function CommentList({
           <div className="flex flex-col items-center py-20">
             <Image
               src="/images/empty-comment.png"
-              alt=""
+              alt="아직 등록된 문의가 없어요"
               width={140}
               height={140}
             />

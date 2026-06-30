@@ -8,7 +8,7 @@ export function formatDate(iso) {
 }
 
 // ISO -> "방금 전" / "N분 전" / "N시간 전" / "N일 전" (그 이상은 날짜)
-export function formatRelative(iso) {
+export function formatTimeAgo(iso) {
   const diff = Date.now() - new Date(iso).getTime();
   const min = Math.floor(diff / 60000);
 

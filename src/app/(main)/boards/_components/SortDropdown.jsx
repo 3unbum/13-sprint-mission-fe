@@ -17,7 +17,7 @@ export default function SortDropdown() {
 
   const current = searchParams.get("sort") ?? "recent";
   const currentLabel =
-    OPTIONS.find((o) => o.value === current)?.label ?? "최신순";
+    OPTIONS.find((option) => option.value === current)?.label ?? "최신순";
 
   function handleSelect(value) {
     const params = new URLSearchParams(searchParams);
@@ -36,7 +36,7 @@ export default function SortDropdown() {
       >
         {/* 모바일: 정렬 아이콘만 / 태블릿+: 라벨 + 화살표 */}
         <Image
-          src="/icons/ic_sort.svg"
+          src="/icons/ui/ic_sort.svg"
           alt="정렬"
           width={24}
           height={24}
@@ -44,8 +44,8 @@ export default function SortDropdown() {
         />
         <span className="hidden md:inline">{currentLabel}</span>
         <Image
-          src="/icons/ic_arrow_down.svg"
-          alt=""
+          src="/icons/ui/ic_arrow_down.svg"
+          alt="정렬 옵션 펼치기"
           width={20}
           height={20}
           className="hidden md:inline"
@@ -54,14 +54,14 @@ export default function SortDropdown() {
 
       {open && (
         <ul className="absolute right-0 z-10 mt-1 w-32 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md">
-          {OPTIONS.map((o) => (
-            <li key={o.value}>
+          {OPTIONS.map((option) => (
+            <li key={option.value}>
               <button
                 type="button"
-                onClick={() => handleSelect(o.value)}
+                onClick={() => handleSelect(option.value)}
                 className="block w-full px-4 py-3 text-left text-base text-gray-800 hover:bg-gray-50"
               >
-                {o.label}
+                {option.label}
               </button>
             </li>
           ))}

@@ -1,6 +1,6 @@
 import { getArticle } from "@/lib/api";
-import ArticleForm from "@/app/boards/write/_components/ArticleForm";
-import { updateArticleAction } from "@/app/boards/[id]/edit/actions";
+import ArticleForm from "@/app/(main)/boards/write/_components/ArticleForm";
+import { updateArticleAction } from "@/app/(main)/boards/[id]/edit/actions";
 
 // 게시글 수정 페이지 (서버 컴포넌트 - 기존 글을 받아 폼에 prefill)
 export default async function EditPage({ params }) {

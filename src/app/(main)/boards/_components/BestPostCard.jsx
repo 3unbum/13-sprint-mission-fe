@@ -7,7 +7,7 @@ export default function BestPostCard({ article }) {
   return (
     <li className="rounded-lg bg-gray-50 px-6 pb-4">
       {/* Best 뱃지 */}
-      <Image src="/icons/ic_badge.svg" alt="Best" width={102} height={30} />
+      <Image src="/icons/ui/ic_badge.svg" alt="Best" width={102} height={30} />
 
       <Link href={`/boards/${article.id}`} className="mt-3 block">
         <div className="flex items-start justify-between gap-4">
@@ -16,8 +16,8 @@ export default function BestPostCard({ article }) {
           </h3>
           <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-gray-200">
             <Image
-              src="/images/default-article.png"
-              alt=""
+              src={article.image ?? "/images/default-article.png"}
+              alt={article.title}
               fill
               sizes="64px"
               className="object-cover"
@@ -30,8 +30,8 @@ export default function BestPostCard({ article }) {
             <span className="text-gray-600">{article.nickname}</span>
             <span className="flex items-center gap-1">
               <Image
-                src="/icons/ic_heart_inactive.svg"
-                alt=""
+                src="/icons/ui/ic_heart_inactive.svg"
+                alt="좋아요"
                 width={16}
                 height={16}
               />
