@@ -11,7 +11,7 @@ export default function Pagination({ page, totalPages, onChange }) {
   const pages = [];
   for (let p = start; p <= end; p++) pages.push(p);
 
-  const baseBtn =
+  const baseBtnStyle =
     "flex h-10 w-10 items-center justify-center rounded-full text-base font-semibold disabled:opacity-30";
 
   return (
@@ -20,7 +20,7 @@ export default function Pagination({ page, totalPages, onChange }) {
         type="button"
         disabled={page === 1}
         onClick={() => onChange(page - 1)}
-        className={`${baseBtn} border border-gray-200 text-gray-600`}
+        className={`${baseBtnStyle} border border-gray-200 text-gray-600`}
       >
         {"<"}
       </button>
@@ -30,7 +30,7 @@ export default function Pagination({ page, totalPages, onChange }) {
           key={p}
           type="button"
           onClick={() => onChange(p)}
-          className={`${baseBtn} ${
+          className={`${baseBtnStyle} ${
             p === page
               ? "bg-brand-blue text-white"
               : "border border-gray-200 text-gray-600"
@@ -44,7 +44,7 @@ export default function Pagination({ page, totalPages, onChange }) {
         type="button"
         disabled={page === totalPages}
         onClick={() => onChange(page + 1)}
-        className={`${baseBtn} border border-gray-200 text-gray-600`}
+        className={`${baseBtnStyle} border border-gray-200 text-gray-600`}
       >
         {">"}
       </button>
