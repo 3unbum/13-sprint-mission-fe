@@ -5,7 +5,6 @@ import Image from "next/image";
 import CommentItem from "@/app/(main)/boards/[id]/_components/CommentItem";
 import CommentForm from "@/app/(main)/boards/[id]/_components/CommentForm";
 import { getComments } from "@/lib/api";
-import { withFakeComment } from "@/lib/fakeData";
 
 // 댓글 목록 + 등록폼 + 더보기 (client - 모든 변경을 state로 즉시 반영)
 export default function CommentList({
@@ -13,9 +12,7 @@ export default function CommentList({
   initialCursor,
   articleId,
 }) {
-  const [comments, setComments] = useState(
-    initialComments.map(withFakeComment),
-  );
+  const [comments, setComments] = useState(initialComments);
   const [cursor, setCursor] = useState(initialCursor);
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +31,7 @@ export default function CommentList({
     setLoading(true);
     try {
       const data = await getComments(articleId, { cursor, noStore: false });
-      setComments((prev) => [...prev, ...data.list.map(withFakeComment)]);
+      setComments((prev) => [...prev, ...data.list]);
       setCursor(data.nextCursor);
     } finally {
       setLoading(false);

@@ -10,6 +10,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "**",
       },
+      // 자체 백엔드 (multer 업로드 이미지)용
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "4000",
+      },
     ],
   },
 };

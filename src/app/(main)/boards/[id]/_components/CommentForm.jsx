@@ -1,25 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { createCommentAction } from "../actions";
+import { createComment } from "@/lib/api.js";
 
-// 댓글 작성 폼. 등록 후 결과를 onAdd로 부모(CommentList)에 넘겨 목록에 즉시 반영.
+// 댓글 작성 폼. client에서 집적 API 호출 (토큰은 localStorage에 있으므로)
 export default function CommentForm({ articleId, onAdd }) {
   const [content, setContent] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  // articleId를 액션의 첫 인자로 미리 묶는다 (FormData는 React가 뒤에 붙임)
-  const action = createCommentAction.bind(null, articleId);
-
-  async function handleAction(formData) {
-    const created = await action(formData);
-    if (created) {
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const created = await createComment(articleId, content.trim());
       onAdd(created); // 부모 state에 추가 -> 즉시 화면 반영
       setContent("");
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setSubmitting(false);
     }
   }
 
   return (
-    <form action={handleAction}>
+    <form onSubmit={handleSubmit}>
       <textarea
         name="content"
         value={content}
@@ -30,7 +34,7 @@ export default function CommentForm({ articleId, onAdd }) {
       <div className="mt-4 flex justify-end">
         <button
           type="submit"
-          disabled={!content.trim()}
+          disabled={!content.trim() || submitting}
           className="h-11 rounded-lg bg-brand-blue px-6 text-base font-semibold text-white disabled:bg-gray-400"
         >
           등록
