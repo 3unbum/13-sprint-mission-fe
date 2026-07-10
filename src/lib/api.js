@@ -188,8 +188,9 @@ export async function getArticles({
   return apiFetch(`/articles?${params}`, { cache: "no-store" });
 }
 
+// 베스트 게시글 - 좋아요 많은 순 상위 3개
 export async function getBestArticles() {
-  const { list } = await getArticles({ pageSize: 30 });
+  const { list } = await getArticles({ pageSize: 3, orderBy: "like" });
   return list;
 }
 
