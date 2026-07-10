@@ -1,5 +1,6 @@
 "use client";
 
+import ImageUpload from "@/app/(main)/items/_components/ImageUpload";
 import { useState } from "react";
 
 // 상품 등록/수정 공통 폼.
@@ -19,7 +20,7 @@ export default function ProductForm({
     description: initialValues.description ?? "",
     price: initialValues.price != null ? String(initialValues.price) : "",
     tags: (initialValues.tags ?? []).join(", "),
-    images: (initialValues.images ?? []).join(", "),
+    images: initialValues.images ?? [],
   });
 
   const handleChange = (e) =>
@@ -41,7 +42,7 @@ export default function ProductForm({
       description: form.description.trim(),
       price: Number(form.price),
       tags: toList(form.tags),
-      images: toList(form.images),
+      images: form.images,
     });
 
   return (
@@ -59,6 +60,15 @@ export default function ProductForm({
       </div>
 
       <form className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-semibold text-gray-700">
+            상품 이미지
+          </span>
+          <ImageUpload
+            images={form.images}
+            onChange={(next) => setForm((prev) => ({ ...prev, images: next }))}
+          />
+        </div>
         <label className="flex flex-col gap-2">
           <span className="text-sm font-semibold text-gray-700">상품명</span>
           <input
@@ -103,19 +113,6 @@ export default function ProductForm({
             value={form.tags}
             onChange={handleChange}
             placeholder="태그, 태그2"
-            className="rounded-lg bg-gray-100 px-6 py-3 text-base text-gray-800 outline-none"
-          />
-        </label>
-
-        <label className="flex flex-col gap-2">
-          <span className="text-sm font-semibold text-gray-700">
-            이미지 URL (쉼표로 구분)
-          </span>
-          <input
-            name="images"
-            value={form.images}
-            onChange={handleChange}
-            placeholder="https://..."
             className="rounded-lg bg-gray-100 px-6 py-3 text-base text-gray-800 outline-none"
           />
         </label>

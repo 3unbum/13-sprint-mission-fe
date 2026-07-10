@@ -5,11 +5,13 @@ import { BASE_URL } from "@/lib/config.js";
 async function tokenFetch(path, { parse = true, ...options } = {}) {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
+  // FormData면 브라우저가 multipart boundary를 포함해 Content-Type을 직접 설정해야 함
+  const isFormData = options.body instanceof FormData;
 
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
@@ -75,6 +77,15 @@ export async function signUp(email, nickname, password, passwordConfirmation) {
 // 내 정보 조회 (토큰 필요)
 export async function getMe() {
   return tokenFetch("/users/me");
+}
+
+// --- 이미지 ---
+
+// 이미지 파일 업로드 (토큰 필요). 서버에 저장된 파일의 URL을 반환
+export async function uploadImage(file) {
+  const formData = new FormData();
+  formData.append("image", file);
+  return tokenFetch("/images/upload", { method: "POST", body: formData });
 }
 
 // --- 상품 ---
