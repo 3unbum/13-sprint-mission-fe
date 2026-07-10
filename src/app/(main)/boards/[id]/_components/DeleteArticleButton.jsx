@@ -1,0 +1,29 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { deleteArticle } from "@/lib/api";
+
+// 게시글 삭제 버튼 (케밥 메뉴용). client에서 직접 API 호출
+export default function DeleteArticleButton({ articleId }) {
+  const router = useRouter();
+
+  async function handleDelete() {
+    try {
+      await deleteArticle(articleId);
+      router.push("/boards");
+      router.refresh(); // 목록에서 삭제된 글 제거 반영
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleDelete}
+      className="w-full py-3 hover:bg-gray-50"
+    >
+      삭제하기
+    </button>
+  );
+}
