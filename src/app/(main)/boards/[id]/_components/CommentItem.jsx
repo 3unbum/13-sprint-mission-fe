@@ -4,29 +4,31 @@ import { useState } from "react";
 import Avatar from "@/components/common/Avatar";
 import { formatTimeAgo } from "@/lib/formatDate";
 import KebabMenu from "@/components/common/KebabMenu";
-import {
-  updateCommentAction,
-  deleteCommentAction,
-} from "@/app/(main)/boards/[id]/actions";
+import { updateComment, deleteComment } from "@/lib/api";
 
 // 댓글 한 개. 보기 <-> 인라인 편집 두 모드를 가져 client로 둔다.
 export default function CommentItem({ comment, onUpdate, onRemove }) {
   const [isEditing, setIsEditing] = useState(false);
 
-  // 액션에 commentId만 붂는다 (articleId는 더 이상 필요 없음)
-  const updateAction = updateCommentAction.bind(null, comment.id);
-
   async function handleUpdate(formData) {
-    const updated = await updateAction(formData);
-    if (updated) {
+    const content = formData.get("content")?.trim();
+    if (!content) return;
+    try {
+      const updated = await updateComment(comment.id, content);
       onUpdate(updated); // 부모 state 교체 -> 즉시 반영
       setIsEditing(false);
+    } catch (err) {
+      alert(err.message);
     }
   }
 
   async function handleDelete() {
-    await deleteCommentAction(comment.id);
-    onRemove(comment.id); // 부모 state에서 제거
+    try {
+      await deleteComment(comment.id);
+      onRemove(comment.id); // 부모 state에서 제거
+    } catch (err) {
+      alert(err.message);
+    }
   }
 
   return (
@@ -76,7 +78,7 @@ export default function CommentItem({ comment, onUpdate, onRemove }) {
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <Avatar size={32} />
             <div className="flex flex-col">
-              <span className="text-gray-600">{comment.nickname}</span>
+              <span className="text-gray-600">{comment.writer?.nickname}</span>
               <span className="text-xs" suppressHydrationWarning>
                 {formatTimeAgo(comment.createdAt)}
               </span>

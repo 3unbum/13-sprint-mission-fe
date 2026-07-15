@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const OPTIONS = [
   { value: "recent", label: "최신순" },
-  { value: "oldest", label: "오래된순" },
+  { value: "like", label: "좋아요순" },
 ];
 
 // 정렬 드롭다운 - 선택 시 URL sort를 갱신한다. (page는 1로 초기화)

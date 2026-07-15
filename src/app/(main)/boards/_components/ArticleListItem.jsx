@@ -15,7 +15,7 @@ export default function ArticleListItem({ article }) {
           </h3>
           <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-gray-200">
             <Image
-              src={article.image ?? "/images/default-article.png"}
+              src={article.image || "/images/default-article.png"}
               alt={article.title}
               fill
               sizes="64px"

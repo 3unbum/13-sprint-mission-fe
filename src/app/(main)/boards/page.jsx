@@ -1,5 +1,4 @@
 import { getArticles } from "@/lib/api";
-import { withFake } from "@/lib/fakeData";
 import ArticleList from "./_components/ArticleList";
 import SearchBar from "./_components/SearchBar";
 import SortDropdown from "./_components/SortDropdown";
@@ -12,9 +11,9 @@ export default async function BoardsPage({ searchParams }) {
 
   const { list, totalCount } = await getArticles({
     keyword,
-    sort,
+    orderBy: sort,
   });
-  const articles = list.map(withFake);
+  
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-6 md:px-6">
@@ -34,7 +33,7 @@ export default async function BoardsPage({ searchParams }) {
         <SortDropdown />
       </div>
 
-      <ArticleList articles={articles} />
+      <ArticleList articles={list} />
 
       <p className="mt-4 text-sm text-gray-400">총 {totalCount}개</p>
     </div>

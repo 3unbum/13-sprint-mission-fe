@@ -11,10 +11,9 @@ export default function NewItemPage() {
 
   const createMutation = useMutation({
     mutationFn: (values) => createProduct(values),
-    onSuccess: (created) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
-      // 등록한 상품 상세로 이동
-      router.push(`/items/${created.id}`);
+      router.push("/items");
     },
     onError: (err) => alert(err.message),
   });

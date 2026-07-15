@@ -1,15 +1,9 @@
 import { getBestArticles } from "@/lib/api";
-import { withFake } from "@/lib/fakeData";
 import BestPostCard from "@/app/(main)/boards/_components/BestPostCard";
 
-// 베스트 게시글 묶음 (서버 컴포넌트)
-// 백엔드에 좋아요가 없어 가짜 likeCount 상위 3개를 뽑는다.
+// 베스트 게시글 묶음 (서버 컴포넌트) - 좋아요 많은 순 상위 3개
 export default async function BestPosts() {
-  const list = await getBestArticles();
-  const best = list
-    .map(withFake)
-    .sort((a, b) => b.likeCount - a.likeCount)
-    .slice(0, 3);
+  const best = await getBestArticles();
 
   if (best.length === 0) return null;
 

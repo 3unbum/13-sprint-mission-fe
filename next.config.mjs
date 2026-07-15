@@ -3,12 +3,19 @@ const nextConfig = {
   /* config options here */
   reactCompiler: true,
   images: {
-    // 상품 이미지는 사용자가 임의 URL을 넣어 호스트가 제각각이라
-    // 모든 https 호스트를 허용한다. (학습용 - 운영에선 호스트를 좁히는 게 안전)
+    // Next 16은 SSRF 방지로 최적화 서버가 사설/루프백 IP로 풀리는 이미지를 차단
+    // 로컬 백엔드의 업로드 이미지용으로 허용
+    dangerouslyAllowLocalIP: true,
     remotePatterns: [
       {
         protocol: "https",
         hostname: "**",
+      },
+      // 자체 백엔드 (multer 업로드 이미지)용
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "4000",
       },
     ],
   },
