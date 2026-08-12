@@ -6,11 +6,11 @@ import { createComment } from "@/lib/api.js";
 // 댓글 작성 폼. client에서 집적 API 호출 (토큰은 localStorage에 있으므로)
 export default function CommentForm({ articleId, onAdd }) {
   const [content, setContent] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setSubmitting(true);
+    setIsSubmitting(true);
     try {
       const created = await createComment(articleId, content.trim());
       onAdd(created); // 부모 state에 추가 -> 즉시 화면 반영
@@ -18,7 +18,7 @@ export default function CommentForm({ articleId, onAdd }) {
     } catch (err) {
       alert(err.message);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   }
 
@@ -34,7 +34,7 @@ export default function CommentForm({ articleId, onAdd }) {
       <div className="mt-4 flex justify-end">
         <button
           type="submit"
-          disabled={!content.trim() || submitting}
+          disabled={!content.trim() || isSubmitting}
           className="h-11 rounded-lg bg-brand-blue px-6 text-base font-semibold text-white disabled:bg-gray-400"
         >
           등록

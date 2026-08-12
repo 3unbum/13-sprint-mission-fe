@@ -9,7 +9,7 @@ const MAX_IMAGES = 3;
 // 상품 이미지 업로드 (최대 3개). 파일 선택 즉시 업로드하고 URL 배열을 부모로 올린다
 export default function ImageUpload({ images, onChange }) {
   const inputRef = useRef(null);
-  const [uploading, setUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [overLimit, setOverLimit] = useState(false);
 
   function handlePickClick() {
@@ -25,14 +25,14 @@ export default function ImageUpload({ images, onChange }) {
     const file = e.target.files?.[0];
     e.target.value = ""; // 같은 파일 재선택 허용
     if (!file) return;
-    setUploading(true);
+    setIsUploading(true);
     try {
       const { url } = await uploadImage(file);
       onChange([...images, url]);
     } catch (err) {
       alert(err.message);
     } finally {
-      setUploading(false);
+      setIsUploading(false);
     }
   }
 
@@ -55,11 +55,11 @@ export default function ImageUpload({ images, onChange }) {
         <button
           type="button"
           onClick={handlePickClick}
-          disabled={uploading}
+          disabled={isUploading}
           className="flex size-[282px] flex-col items-center justify-center gap-3 rounded-xl bg-gray-100 text-base text-gray-400"
         >
           <span className="text-5xl font-thin leading-none">+</span>
-          {uploading ? "업로드 중..." : "이미지 등록"}
+          {isUploading ? "업로드 중..." : "이미지 등록"}
         </button>
 
         {images.map((url) => (

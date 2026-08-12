@@ -14,7 +14,7 @@ export default function CommentList({
 }) {
   const [comments, setComments] = useState(initialComments);
   const [cursor, setCursor] = useState(initialCursor);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 등록: 맨 위에 추가 / 수정: 해당 항목 교체 / 삭제: 제거
   function addComment(comment) {
@@ -28,13 +28,13 @@ export default function CommentList({
   }
 
   async function handleLoadMore() {
-    setLoading(true);
+    setIsLoading(true);
     try {
       const data = await getComments(articleId, { cursor, noStore: false });
       setComments((prev) => [...prev, ...data.list]);
       setCursor(data.nextCursor);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   }
 
@@ -75,10 +75,10 @@ export default function CommentList({
             <button
               type="button"
               onClick={handleLoadMore}
-              disabled={loading}
+              disabled={isLoading}
               className="h-11 rounded-lg border border-gray-300 px-6 text-base font-semibold text-gray-600 disabled:opacity-50"
             >
-              {loading ? "불러오는 중..." : "더보기"}
+              {isLoading ? "불러오는 중..." : "더보기"}
             </button>
           </div>
         )}

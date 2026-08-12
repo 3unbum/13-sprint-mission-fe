@@ -16,13 +16,13 @@ export default function ArticleForm({
   const router = useRouter();
   const [title, setTitle] = useState(defaultTitle);
   const [content, setContent] = useState(defaultContent);
-  const [submitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isValid = title.trim() && content.trim();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setSubmitting(true);
+    setIsSubmitting(true);
     try {
       const data = { title: title.trim(), content: content.trim() };
       const article = articleId
@@ -32,7 +32,7 @@ export default function ArticleForm({
       router.refresh(); // 서버 컴포넌트(목록/상세) 캐시 갱신
     } catch (err) {
       alert(err.message);
-      setSubmitting(false); // 성공 시엔 페이지 이동하므로 실패 때만 복구
+      setIsSubmitting(false); // 성공 시엔 페이지 이동하므로 실패 때만 복구
     }
   }
 
@@ -42,7 +42,7 @@ export default function ArticleForm({
         <h2 className="text-xl font-bold text-gray-900">{heading}</h2>
         <button
           type="submit"
-          disabled={!isValid || submitting}
+          disabled={!isValid || isSubmitting}
           className="h-11 rounded-lg bg-brand-blue px-6 text-base font-semibold text-white disabled:bg-gray-400"
         >
           {submitLabel}
