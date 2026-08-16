@@ -5,15 +5,19 @@ import SortDropdown from "./_components/SortDropdown";
 import Link from "next/link";
 import BestPosts from "@/app/(main)/boards/_components/BestPosts";
 
+// Next 16 App Router에서 searchParams는 Promise로 넘어온다
+interface BoardsPageProps {
+  searchParams: Promise<{ keyword?: string; sort?: string }>;
+}
+
 // 서버 컴포넌트 - searchParams를 받아 목록을 fetch한다.
-export default async function BoardsPage({ searchParams }) {
+export default async function BoardsPage({ searchParams }: BoardsPageProps) {
   const { keyword = "", sort = "recent" } = await searchParams;
 
   const { list, totalCount } = await getArticles({
     keyword,
     orderBy: sort,
   });
-  
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-6 md:px-6">

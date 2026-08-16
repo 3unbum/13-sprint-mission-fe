@@ -2,10 +2,10 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import AuthProvider from "@/providers/AuthProvider";
 
-export default function Providers({ children }) {
+export default function Providers({ children }: { children: ReactNode }) {
   // useState로 생성해야 컴포넌트마다 QueryClient 인스턴스가 공유되지 않음.
   const [queryClient] = useState(
     () =>

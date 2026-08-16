@@ -8,9 +8,14 @@ export default function SearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  function handleSubmit(e) {
+  // e.currentTarget이 폼 자체라 elements로 name="keyword" 입력을 꺼낸다
+  // (e.target은 EventTarget이라 폼 요소 접근이 안 됨 - 교안 28 참고)
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const keyword = e.target.keyword.value.trim();
+    const input = e.currentTarget.elements.namedItem(
+      "keyword",
+    ) as HTMLInputElement;
+    const keyword = input.value.trim();
 
     const params = new URLSearchParams(searchParams);
     if (keyword) params.set("keyword", keyword);

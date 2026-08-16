@@ -9,7 +9,20 @@ import { useAuth } from "@/providers/AuthProvider";
 import SocialLogin from "@/app/(auth)/_components/SocialLogin";
 import AuthInput from "@/app/(auth)/_components/AuthInput";
 
-function ErrorModal({ message, onClose }) {
+// 로그인 폼이 다루는 필드 (useForm 제네릭에 넘겨 register/errors까지 타입이 이어짐)
+interface SigninFormValues {
+  email: string;
+  password: string;
+}
+
+// 로그인/회원가입 실패 시 띄우는 모달
+function ErrorModal({
+  message,
+  onClose,
+}: {
+  message: string;
+  onClose: () => void;
+}) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="flex w-[327px] flex-col items-center gap-6 rounded-2xl bg-white px-8 py-10 md:w-[540px]">
@@ -27,21 +40,18 @@ function ErrorModal({ message, onClose }) {
   );
 }
 
-export default function SignupPage() {
+export default function SigninPage() {
   const router = useRouter();
-  const { register: registerUser } = useAuth(); // rhf register와 충돌 피해 별칭
+  const { login } = useAuth();
 
   const [modalMessage, setModalMessage] = useState("");
 
   const {
     register,
     handleSubmit,
-    watch,
+    setError,
     formState: { errors, isValid, isSubmitting },
-  } = useForm({ mode: "onChange" });
-
-  // 비밀번호 확인 일치 검사용 - 현재 password 값을 추적
-  const password = watch("password");
+  } = useForm<SigninFormValues>({ mode: "onChange" });
 
   // 이미 로그인된 상태면 /items로 리다이렉트
   useEffect(() => {
@@ -49,20 +59,23 @@ export default function SignupPage() {
     if (token) router.replace("/items");
   }, [router]);
 
-  // 검증 통과 시에만 호출됨
-  const onSubmit = async ({
-    email,
-    nickname,
-    password,
-    passwordConfirmation,
-  }) => {
+  // 검증 통과 시에만 호출됨 (data = { email, password })
+  const onSubmit = async ({ email, password }: SigninFormValues) => {
     try {
-      await registerUser(email, nickname, password, passwordConfirmation);
+      await login(email, password);
       router.push("/items");
     } catch (err) {
-      setModalMessage(
-        err?.message ?? "회원가입에 실패했어요. 다시 시도해주세요.",
-      );
+      // catch의 err는 unknown이라 Error인지 좁힌 뒤 메시지를 꺼낸다
+      const msg = err instanceof Error ? err.message : "";
+      if (msg.includes("이메일") || msg.includes("email")) {
+        setError("email", { message: "이메일을 확인해 주세요." });
+      } else if (msg.includes("비밀번호") || msg.includes("password")) {
+        setError("password", { message: "비밀번호를 확인해 주세요." });
+      } else {
+        setModalMessage(
+          "로그인에 실패했어요. 이메일 또는 비밀번호를 확인해 주세요.",
+        );
+      }
     }
   };
 
@@ -114,17 +127,6 @@ export default function SignupPage() {
           />
 
           <AuthInput
-            id="nickname"
-            label="닉네임"
-            type="text"
-            placeholder="닉네임을 입력해주세요"
-            error={errors.nickname}
-            registration={register("nickname", {
-              required: "닉네임을 입력해 주세요.",
-            })}
-          />
-
-          <AuthInput
             id="password"
             label="비밀번호"
             type="password"
@@ -139,40 +141,27 @@ export default function SignupPage() {
             })}
           />
 
-          <AuthInput
-            id="passwordConfirmation"
-            label="비밀번호 확인"
-            type="password"
-            placeholder="비밀번호를 다시 입력해주세요"
-            error={errors.passwordConfirmation}
-            registration={register("passwordConfirmation", {
-              required: "비밀번호를 다시 입력해 주세요.",
-              validate: (value) =>
-                value === password || "비밀번호가 일치하지 않아요.",
-            })}
-          />
-
-          {/* 회원가입 버튼 */}
+          {/* 로그인 버튼 */}
           <button
             type="submit"
             disabled={!isValid || isSubmitting}
             className="h-14 rounded-full bg-brand-blue text-xl font-semibold text-white disabled:opacity-50"
           >
-            {isSubmitting ? "가입 중..." : "회원가입"}
+            {isSubmitting ? "로그인 중..." : "로그인"}
           </button>
         </form>
 
         {/* 소셜 로그인 */}
         <SocialLogin />
 
-        {/* 로그인 링크 */}
+        {/* 회원가입 링크 */}
         <p className="mt-6 text-sm font-medium text-gray-900">
-          이미 회원이신가요?{" "}
+          판다마켓이 처음이신가요?{" "}
           <Link
-            href="/signin"
+            href="/signup"
             className="font-semibold text-brand-blue underline"
           >
-            로그인
+            회원가입
           </Link>
         </p>
       </div>

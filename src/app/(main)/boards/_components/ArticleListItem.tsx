@@ -2,9 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatDate } from "@/lib/formatDate";
 import Avatar from "@/components/common/Avatar";
+import type { Article } from "@/types/api";
 
 // 게시글 한 줄 (서버 컴포넌트 - 인터렉션 없음)
-export default function ArticleListItem({ article }) {
+export default function ArticleListItem({ article }: { article: Article }) {
   return (
     <li className="border-b border-gray-200 py-6">
       <Link href={`/boards/${article.id}`} className="block">

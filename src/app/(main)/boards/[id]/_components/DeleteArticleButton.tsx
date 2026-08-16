@@ -4,7 +4,11 @@ import { useRouter } from "next/navigation";
 import { deleteArticle } from "@/lib/api";
 
 // 게시글 삭제 버튼 (케밥 메뉴용). client에서 직접 API 호출
-export default function DeleteArticleButton({ articleId }) {
+export default function DeleteArticleButton({
+  articleId,
+}: {
+  articleId: number | string;
+}) {
   const router = useRouter();
 
   async function handleDelete() {
@@ -13,7 +17,7 @@ export default function DeleteArticleButton({ articleId }) {
       router.push("/boards");
       router.refresh(); // 목록에서 삭제된 글 제거 반영
     } catch (err) {
-      alert(err.message);
+      alert(err instanceof Error ? err.message : "삭제에 실패했어요.");
     }
   }
 

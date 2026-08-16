@@ -1,7 +1,8 @@
+import type { Article } from "@/types/api";
 import ArticleListItem from "@/app/(main)/boards/_components/ArticleListItem";
 
 // 게시글 목록 (서버 컴포넌트)
-export default function ArticleList({ articles }) {
+export default function ArticleList({ articles }: { articles: Article[] }) {
   // 빈 상태
   if (articles.length === 0) {
     return (

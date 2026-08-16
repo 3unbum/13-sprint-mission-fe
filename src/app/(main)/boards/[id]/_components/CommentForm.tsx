@@ -1,14 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { createComment } from "@/lib/api.js";
+import { createComment } from "@/lib/api";
+import type { Comment } from "@/types/api";
 
-// 댓글 작성 폼. client에서 집적 API 호출 (토큰은 localStorage에 있으므로)
-export default function CommentForm({ articleId, onAdd }) {
+interface CommentFormProps {
+  articleId: number | string;
+  onAdd: (comment: Comment) => void;
+}
+
+// 댓글 작성 폼. client에서 직접 API 호출 (토큰은 localStorage에 있으므로)
+export default function CommentForm({ articleId, onAdd }: CommentFormProps) {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
     try {
@@ -16,7 +22,7 @@ export default function CommentForm({ articleId, onAdd }) {
       onAdd(created); // 부모 state에 추가 -> 즉시 화면 반영
       setContent("");
     } catch (err) {
-      alert(err.message);
+      alert(err instanceof Error ? err.message : "댓글 등록에 실패했어요.");
     } finally {
       setIsSubmitting(false);
     }

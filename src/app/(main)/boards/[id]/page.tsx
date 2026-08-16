@@ -7,8 +7,15 @@ import KebabMenu from "@/components/common/KebabMenu";
 import DeleteArticleButton from "@/app/(main)/boards/[id]/_components/DeleteArticleButton";
 import Avatar from "@/components/common/Avatar";
 
+// Next 16 App Router에서 params는 Promise로 넘어온다 (동적 세그먼트는 문자열)
+interface ArticleDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
 // 게시글 상세 (서버 컴포넌트)
-export default async function ArticleDetailPage({ params }) {
+export default async function ArticleDetailPage({
+  params,
+}: ArticleDetailPageProps) {
   const { id } = await params;
 
   const [article, commentsData] = await Promise.all([

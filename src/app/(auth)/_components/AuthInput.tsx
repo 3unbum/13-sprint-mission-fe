@@ -2,6 +2,18 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import type { FieldError, UseFormRegisterReturn } from "react-hook-form";
+
+interface AuthInputProps {
+  id: string;
+  label: string;
+  type?: string;
+  placeholder?: string;
+  // react-hook-form이 errors.email 등으로 넘겨주는 에러 객체 (없으면 undefined)
+  error?: FieldError;
+  // register("name", {...})의 반환값 - onChange/onBlur/name/ref가 들어있음
+  registration: UseFormRegisterReturn;
+}
 
 // 로그인/회원가입 공통 입력 필드 (라벨 + input + 에러메시지).
 // type="password"면 눈 모양 토글 버튼을 내부에서 자동 처리한다.
@@ -13,7 +25,7 @@ export default function AuthInput({
   placeholder,
   error,
   registration,
-}) {
+}: AuthInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
   // 비밀번호일 때만 토글에 따라 실제 input type을 바꾼다

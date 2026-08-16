@@ -1,8 +1,13 @@
 import { getArticle } from "@/lib/api";
 import ArticleForm from "@/app/(main)/boards/write/_components/ArticleForm";
 
+// Next 16 App Router에서 params는 Promise로 넘어온다
+interface EditPageProps {
+  params: Promise<{ id: string }>;
+}
+
 // 게시글 수정 페이지 (서버 컴포넌트 - 기존 글을 받아 폼에 prefill)
-export default async function EditPage({ params }) {
+export default async function EditPage({ params }: EditPageProps) {
   const { id } = await params;
   const article = await getArticle(id);
 

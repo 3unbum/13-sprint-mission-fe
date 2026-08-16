@@ -1,19 +1,21 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import Image from "next/image";
 
 // 케밥 버튼 + 드롭다운. 메뉴 항목은 children으로 주입받아 재사용
 // (게시글/댓글이 각자 다른 수정・삭제 동작을 넣음)
-export default function KebabMenu({ children }) {
+export default function KebabMenu({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef(null);
+  // 바깥 클릭 판정을 위해 감싸는 div를 참조 (초기값 null이라 제네릭에 | null 필요 없음 - HTMLDivElement로 충분)
+  const ref = useRef<HTMLDivElement>(null);
 
   // 바깥 클릭 시 닫기
   useEffect(() => {
     if (!open) return;
-    function handleClick(e) {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    // document 이벤트라 React 합성 이벤트가 아닌 DOM MouseEvent
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);

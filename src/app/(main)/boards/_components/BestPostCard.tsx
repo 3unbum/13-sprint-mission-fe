@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { formatDate } from "@/lib/formatDate";
+import type { Article } from "@/types/api";
 
 // 베스트 게시글 카드 1개 (서버 컴포넌트)
-export default function BestPostCard({ article }) {
+export default function BestPostCard({ article }: { article: Article }) {
   return (
     <li className="rounded-lg bg-gray-50 px-6 pb-4">
       {/* Best 뱃지 */}

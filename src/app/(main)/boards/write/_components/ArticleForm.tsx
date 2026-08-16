@@ -4,6 +4,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createArticle, updateArticle } from "@/lib/api";
 
+interface ArticleFormProps {
+  // articleId가 있으면 수정 모드, 없으면(null) 등록 모드
+  articleId?: number | string | null;
+  defaultTitle?: string;
+  defaultContent?: string;
+  heading?: string;
+  submitLabel?: string;
+}
+
 // 게시글 등록/수정 공용 폼
 // articleId가 있으면 수정, 없으면 등록. client에서 직접 API 호출 (토큰은 localStorage에 있으므로)
 export default function ArticleForm({
@@ -12,7 +21,7 @@ export default function ArticleForm({
   defaultContent = "",
   heading = "게시글 쓰기",
   submitLabel = "등록",
-}) {
+}: ArticleFormProps) {
   const router = useRouter();
   const [title, setTitle] = useState(defaultTitle);
   const [content, setContent] = useState(defaultContent);
@@ -20,7 +29,7 @@ export default function ArticleForm({
 
   const isValid = title.trim() && content.trim();
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
     try {
@@ -31,7 +40,7 @@ export default function ArticleForm({
       router.push(`/boards/${article.id}`);
       router.refresh(); // 서버 컴포넌트(목록/상세) 캐시 갱신
     } catch (err) {
-      alert(err.message);
+      alert(err instanceof Error ? err.message : "저장에 실패했어요.");
       setIsSubmitting(false); // 성공 시엔 페이지 이동하므로 실패 때만 복구
     }
   }

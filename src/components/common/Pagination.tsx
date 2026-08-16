@@ -1,14 +1,24 @@
 "use client";
 
+interface PaginationProps {
+  page: number;
+  totalPages: number;
+  onChange: (page: number) => void;
+}
+
 // 페이지네이션 - 현재 페이지 주변 번호 + 이전/다음 버튼
-export default function Pagination({ page, totalPages, onChange }) {
+export default function Pagination({
+  page,
+  totalPages,
+  onChange,
+}: PaginationProps) {
   if (totalPages <= 1) return null; // 페이지가 1개뿐이라면 안 보여줌
 
   // 현재 페이지 주변 최대 5개만 노출 (예: 3 4 [5] 6 7)
   const PER_GROUP = 5;
   const start = Math.max(1, page - 2);
   const end = Math.min(totalPages, start + PER_GROUP - 1);
-  const pages = [];
+  const pages: number[] = [];
   for (let p = start; p <= end; p++) pages.push(p);
 
   const baseBtnStyle =

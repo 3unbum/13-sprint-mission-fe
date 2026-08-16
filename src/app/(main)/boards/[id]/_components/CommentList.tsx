@@ -5,32 +5,43 @@ import Image from "next/image";
 import CommentItem from "@/app/(main)/boards/[id]/_components/CommentItem";
 import CommentForm from "@/app/(main)/boards/[id]/_components/CommentForm";
 import { getComments } from "@/lib/api";
+import type { Comment } from "@/types/api";
+
+interface CommentListProps {
+  initialComments: Comment[];
+  initialCursor: number | null;
+  articleId: number | string;
+}
 
 // 댓글 목록 + 등록폼 + 더보기 (client - 모든 변경을 state로 즉시 반영)
 export default function CommentList({
   initialComments,
   initialCursor,
   articleId,
-}) {
-  const [comments, setComments] = useState(initialComments);
-  const [cursor, setCursor] = useState(initialCursor);
+}: CommentListProps) {
+  const [comments, setComments] = useState<Comment[]>(initialComments);
+  const [cursor, setCursor] = useState<number | null>(initialCursor);
   const [isLoading, setIsLoading] = useState(false);
 
   // 등록: 맨 위에 추가 / 수정: 해당 항목 교체 / 삭제: 제거
-  function addComment(comment) {
+  function addComment(comment: Comment) {
     setComments((prev) => [comment, ...prev]);
   }
-  function updateCommentInList(updated) {
+  function updateCommentInList(updated: Comment) {
     setComments((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
   }
-  function removeComment(id) {
+  function removeComment(id: number) {
     setComments((prev) => prev.filter((c) => c.id !== id));
   }
 
   async function handleLoadMore() {
     setIsLoading(true);
     try {
-      const data = await getComments(articleId, { cursor, noStore: false });
+      // cursor가 null이면 파라미터를 안 붙이도록 undefined로 변환
+      const data = await getComments(articleId, {
+        cursor: cursor ?? undefined,
+        noStore: false,
+      });
       setComments((prev) => [...prev, ...data.list]);
       setCursor(data.nextCursor);
     } finally {

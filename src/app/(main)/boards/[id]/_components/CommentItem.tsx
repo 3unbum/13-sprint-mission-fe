@@ -5,20 +5,33 @@ import Avatar from "@/components/common/Avatar";
 import { formatTimeAgo } from "@/lib/formatDate";
 import KebabMenu from "@/components/common/KebabMenu";
 import { updateComment, deleteComment } from "@/lib/api";
+import type { Comment } from "@/types/api";
+
+interface CommentItemProps {
+  comment: Comment;
+  onUpdate: (comment: Comment) => void;
+  onRemove: (id: number) => void;
+}
 
 // 댓글 한 개. 보기 <-> 인라인 편집 두 모드를 가져 client로 둔다.
-export default function CommentItem({ comment, onUpdate, onRemove }) {
+export default function CommentItem({
+  comment,
+  onUpdate,
+  onRemove,
+}: CommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
 
-  async function handleUpdate(formData) {
-    const content = formData.get("content")?.trim();
+  async function handleUpdate(formData: FormData) {
+    // formData.get은 FormDataEntryValue | null이라 문자열인지 확인 후 trim
+    const value = formData.get("content");
+    const content = typeof value === "string" ? value.trim() : "";
     if (!content) return;
     try {
       const updated = await updateComment(comment.id, content);
       onUpdate(updated); // 부모 state 교체 -> 즉시 반영
       setIsEditing(false);
     } catch (err) {
-      alert(err.message);
+      alert(err instanceof Error ? err.message : "댓글 수정에 실패했어요.");
     }
   }
 
@@ -27,7 +40,7 @@ export default function CommentItem({ comment, onUpdate, onRemove }) {
       await deleteComment(comment.id);
       onRemove(comment.id); // 부모 state에서 제거
     } catch (err) {
-      alert(err.message);
+      alert(err instanceof Error ? err.message : "댓글 삭제에 실패했어요.");
     }
   }
 

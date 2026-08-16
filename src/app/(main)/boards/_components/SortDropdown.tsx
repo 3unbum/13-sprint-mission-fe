@@ -19,7 +19,7 @@ export default function SortDropdown() {
   const currentLabel =
     OPTIONS.find((option) => option.value === current)?.label ?? "최신순";
 
-  function handleSelect(value) {
+  function handleSelect(value: string) {
     const params = new URLSearchParams(searchParams);
     params.set("sort", value);
     params.delete("page");
