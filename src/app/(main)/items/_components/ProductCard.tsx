@@ -3,9 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import type { Product } from "@/types/api";
 
 // 상품 카드 한 장 - 이미지, 이름, 가격, 좋아요 순
-export default function ProductCard({ product }) {
+export default function ProductCard({ product }: { product: Product }) {
   const [imgError, setImgError] = useState(false);
 
   // image[0]이 없거나(null) 로드에 실패하면 (imgError) 기본 이미지로

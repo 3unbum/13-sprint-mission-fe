@@ -6,9 +6,14 @@ import { uploadImage } from "@/lib/api";
 
 const MAX_IMAGES = 3;
 
+interface ImageUploadProps {
+  images: string[];
+  onChange: (images: string[]) => void;
+}
+
 // 상품 이미지 업로드 (최대 3개). 파일 선택 즉시 업로드하고 URL 배열을 부모로 올린다
-export default function ImageUpload({ images, onChange }) {
-  const inputRef = useRef(null);
+export default function ImageUpload({ images, onChange }: ImageUploadProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [overLimit, setOverLimit] = useState(false);
 
@@ -21,7 +26,7 @@ export default function ImageUpload({ images, onChange }) {
     inputRef.current?.click();
   }
 
-  async function handleFileChange(e) {
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     e.target.value = ""; // 같은 파일 재선택 허용
     if (!file) return;
@@ -30,13 +35,13 @@ export default function ImageUpload({ images, onChange }) {
       const { url } = await uploadImage(file);
       onChange([...images, url]);
     } catch (err) {
-      alert(err.message);
+      alert(err instanceof Error ? err.message : "이미지 업로드에 실패했어요.");
     } finally {
       setIsUploading(false);
     }
   }
 
-  function handleRemove(url) {
+  function handleRemove(url: string) {
     setOverLimit(false);
     onChange(images.filter((u) => u !== url));
   }

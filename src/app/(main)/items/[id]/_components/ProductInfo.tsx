@@ -4,6 +4,16 @@ import Image from "next/image";
 import Avatar from "@/components/common/Avatar";
 import KebabMenu from "@/components/common/KebabMenu";
 import { formatDate } from "@/lib/formatDate";
+import type { Product } from "@/types/api";
+
+interface ProductInfoProps {
+  product: Product;
+  isOwner: boolean;
+  onEdit: () => void;
+  onDeleteClick: () => void;
+  onFavorite: () => void;
+  favoritePending?: boolean;
+}
 
 // 상품 상세 상단 정보 블록 (이미지 + 제목/가격/케밥 + 소개/태그 + 판매자/좋아요).
 // 데이터 패칭/뮤테이션은 페이지가 담당하고, 여기는 표시 + 콜백만.
@@ -14,7 +24,7 @@ export default function ProductInfo({
   onDeleteClick,
   onFavorite,
   favoritePending,
-}) {
+}: ProductInfoProps) {
   return (
     <div className="flex flex-col gap-6 md:flex-row">
       {/* 이미지 */}

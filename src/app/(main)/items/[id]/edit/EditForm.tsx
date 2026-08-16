@@ -4,12 +4,20 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProduct } from "@/lib/api";
 import ProductForm from "@/app/(main)/items/_components/ProductForm";
+import type { ProductFormValues } from "@/app/(main)/items/_components/ProductForm";
+import type { Product } from "@/types/api";
 
-export default function EditForm({ id, product }) {
+interface EditFormProps {
+  id: number | string;
+  product: Product;
+}
+
+export default function EditForm({ id, product }: EditFormProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const updateMutation = useMutation({
+  // 제네릭: <성공 시 반환 타입, 에러 타입, mutate에 넘기는 인자 타입>
+  const updateMutation = useMutation<Product, Error, ProductFormValues>({
     mutationFn: (values) => updateProduct(id, values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });

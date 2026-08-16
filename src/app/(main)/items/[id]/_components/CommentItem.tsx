@@ -7,8 +7,14 @@ import Avatar from "@/components/common/Avatar";
 import KebabMenu from "@/components/common/KebabMenu";
 import { useAuth } from "@/providers/AuthProvider";
 import { formatTimeAgo } from "@/lib/formatDate";
+import type { Comment } from "@/types/api";
 
-export default function CommentItem({ comment, productId }) {
+interface CommentItemProps {
+  comment: Comment;
+  productId: number | string;
+}
+
+export default function CommentItem({ comment, productId }: CommentItemProps) {
   const queryClient = useQueryClient();
   const { user } = useAuth();
 

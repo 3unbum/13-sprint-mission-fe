@@ -1,7 +1,17 @@
 "use client";
 
+interface DeleteConfirmModalProps {
+  onCancel: () => void;
+  onConfirm: () => void;
+  isPending?: boolean;
+}
+
 // 상품 삭제 확인 모달 (시안 8532-46779: 빨강 원형 체크 + 취소/네)
-export default function DeleteConfirmModal({ onCancel, onConfirm, isPending }) {
+export default function DeleteConfirmModal({
+  onCancel,
+  onConfirm,
+  isPending,
+}: DeleteConfirmModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="flex w-[330px] flex-col items-center rounded-2xl bg-white px-6 py-7">

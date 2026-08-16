@@ -32,7 +32,7 @@ export default function ItemsPage() {
   const totalPages = data ? Math.ceil(data.totalCount / PAGE_SIZE) : 0;
 
   // 검색 제출 - 입력값을 실제 검색어로 확정
-  function handleSearch(e) {
+  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setKeyword(keywordInput.trim());
     setPage(1); // 검색하면 첫 페이지로

@@ -16,7 +16,11 @@ import CommentSection from "@/app/(main)/items/[id]/_components/CommentSection";
 import ProductInfo from "@/app/(main)/items/[id]/_components/ProductInfo";
 import DeleteConfirmModal from "@/app/(main)/items/[id]/_components/DeleteConfirmModal";
 
-export default function ItemDetailPage({ params }) {
+interface ItemDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function ItemDetailPage({ params }: ItemDetailPageProps) {
   // Next 16: params는 Promise라 use()로 언래핑
   const router = useRouter();
   const { user } = useAuth();
@@ -34,9 +38,15 @@ export default function ItemDetailPage({ params }) {
   });
 
   // 좋아요 토글 (현재 상태 반대로 호출 -> 성공 시 상세 캐시 갱신)
-  const favoriteMutation = useMutation({
-    mutationFn: () =>
-      product.isFavorite ? unfavoriteProduct(id) : favoriteProduct(id),
+  // 두 API의 반환 타입이 달라(Product / void) 반환값은 쓰지 않고 void로 통일
+  const favoriteMutation = useMutation<void, Error, void>({
+    mutationFn: async () => {
+      if (product?.isFavorite) {
+        await unfavoriteProduct(id);
+      } else {
+        await favoriteProduct(id);
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products", id] });
     },

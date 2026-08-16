@@ -132,7 +132,7 @@ export async function getProducts({
   pageSize = 10,
   keyword = "",
   orderBy = "recent", // "recent" | "favorite"
-} = {}) {
+}: ListParams = {}): Promise<ListResponse<Product>> {
   const params = new URLSearchParams({
     page: String(page),
     pageSize: String(pageSize),
@@ -141,10 +141,12 @@ export async function getProducts({
   if (keyword) params.set("keyword", keyword);
 
   // 상품 목록은 비로그인도 볼 수 있어요
-  return apiFetch(`/products?${params}`, { cache: "no-store" });
+  return apiFetch<ListResponse<Product>>(`/products?${params}`, {
+    cache: "no-store",
+  });
 }
 
-// 상품 상세 (토큰 필요 - 요구사항: 인가된 사용자만)
+// 상품 상세 (비로그인도 조회 가능, 로그인 시 isFavorite 반영)
 export async function getProduct(id: number | string): Promise<Product> {
   return tokenFetch<Product>(`/products/${id}`);
 }

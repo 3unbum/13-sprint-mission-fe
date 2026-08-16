@@ -6,7 +6,11 @@ import Image from "next/image";
 import { getProductComments, createProductComment } from "@/lib/api";
 import CommentItem from "@/app/(main)/items/[id]/_components/CommentItem";
 
-export default function CommentSection({ productId }) {
+export default function CommentSection({
+  productId,
+}: {
+  productId: number | string;
+}) {
   const queryClient = useQueryClient();
   const [content, setContent] = useState("");
 

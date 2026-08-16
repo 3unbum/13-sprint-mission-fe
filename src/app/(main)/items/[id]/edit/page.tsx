@@ -5,7 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getProduct } from "@/lib/api";
 import EditForm from "./EditForm";
 
-export default function ItemEditPage({ params }) {
+interface ItemEditPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function ItemEditPage({ params }: ItemEditPageProps) {
   const { id } = use(params);
 
   const {
