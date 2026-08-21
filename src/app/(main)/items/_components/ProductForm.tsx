@@ -2,15 +2,10 @@
 
 import ImageUpload from "@/app/(main)/items/_components/ImageUpload";
 import { useState } from "react";
+import type { ProductFormValues } from "@/types/api";
 
-// 폼이 정제해서 넘기는 상품 데이터 (등록/수정 공통)
-export interface ProductFormValues {
-  name: string;
-  description: string;
-  price: number;
-  tags: string[];
-  images: string[];
-}
+// 정의는 types/api.ts로 옮김. 기존 import 경로를 쓰는 곳들을 위해 재수출
+export type { ProductFormValues };
 
 interface ProductFormProps {
   title: string;
