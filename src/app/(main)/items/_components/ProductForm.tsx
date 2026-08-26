@@ -16,15 +16,6 @@ interface ProductFormProps {
   initialValues?: Partial<ProductFormValues>;
 }
 
-// 폼이 정제해서 넘기는 상품 데이터 (등록/수정 공통)
-export interface ProductFormValues {
-  name: string;
-  description: string;
-  price: number;
-  tags: string[];
-  images: string[];
-}
-
 interface ProductFormProps {
   title: string;
   submitLabel: string;
