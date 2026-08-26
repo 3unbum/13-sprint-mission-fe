@@ -16,6 +16,24 @@ interface ProductFormProps {
   initialValues?: Partial<ProductFormValues>;
 }
 
+// 폼이 정제해서 넘기는 상품 데이터 (등록/수정 공통)
+export interface ProductFormValues {
+  name: string;
+  description: string;
+  price: number;
+  tags: string[];
+  images: string[];
+}
+
+interface ProductFormProps {
+  title: string;
+  submitLabel: string;
+  isPending?: boolean;
+  onSubmit: (values: ProductFormValues) => void;
+  // 수정 모드일 때만 기존 값이 들어옴 (등록은 빈 객체)
+  initialValues?: Partial<ProductFormValues>;
+}
+
 // 상품 등록/수정 공통 폼.
 // - initialValues: 빈 값(등록) 또는 기존 상품 값(수정)
 // - onSubmit: 정제된 { name, description, price, tags, images } 를 받는다
